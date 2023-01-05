@@ -1,7 +1,9 @@
-import pytorch_lightning as pl
-from torch.utils.data import DataLoader, TensorDataset
-import torch
 import os
+from typing import Optional
+
+import pytorch_lightning as pl
+import torch
+from torch.utils.data import DataLoader, TensorDataset
 
 
 class CIFAR10DataModule(pl.LightningDataModule):
@@ -19,9 +21,15 @@ class CIFAR10DataModule(pl.LightningDataModule):
         validation_dataset = torch.load(os.path.join(self.data_dir, "validation.pt"))
         test_dataset = torch.load(os.path.join(self.data_dir, "test.pt"))
 
-        self.cifar10_train = TensorDataset(train_dataset["images"], train_dataset["labels"])
-        self.cifar10_validation = TensorDataset(validation_dataset["images"], validation_dataset["labels"])
-        self.cifar10_test = TensorDataset(test_dataset["images"], test_dataset["labels"])
+        self.cifar10_train = TensorDataset(
+            train_dataset["images"], train_dataset["labels"]
+        )
+        self.cifar10_validation = TensorDataset(
+            validation_dataset["images"], validation_dataset["labels"]
+        )
+        self.cifar10_test = TensorDataset(
+            test_dataset["images"], test_dataset["labels"]
+        )
 
     def train_dataloader(self):
         return DataLoader(self.cifar10_train, batch_size=self.batch_size)
