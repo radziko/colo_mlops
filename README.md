@@ -20,6 +20,9 @@ From the before-mentioned model-framework, the RestNet model ([Documentation](ht
 
 
 MLOps project
+## Commands to use:
+1. Use dataprocessor:   python src/data/make_dataset.py data/raw data/processed
+
 
 Project Organization
 ------------
