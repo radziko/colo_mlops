@@ -70,7 +70,6 @@ def main(input_filepath, output_filepath, seed):
     test_labels = torch.LongTensor(test_dataset[b"labels"])
 
     train_data = {"images": training_images, "labels": training_labels}
-    validation_data = {"images": validation_images, "labels": validation_labels}
     test_data = {"images": test_images, "labels": test_labels}
 
     output_dir = os.path.join(output_filepath, "CIFAR10")
