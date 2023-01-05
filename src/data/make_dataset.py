@@ -42,6 +42,8 @@ def main(input_filepath, output_filepath, seed):
             transforms.ToTensor(),
             transforms.Lambda(
                 lambda x: x.view(-1, 3, 32, 32)
+                .swapdims(1, 3)
+                .swapdims(1, 2)  # Have to swap dimensions twice to avoid transpose
             ),  # Convert it to square images
             transforms.Normalize((0,), (1,)),  # Then standardize
         ]
@@ -70,6 +72,7 @@ def main(input_filepath, output_filepath, seed):
     test_labels = torch.LongTensor(test_dataset[b"labels"])
 
     train_data = {"images": training_images, "labels": training_labels}
+    validation_data = {"images": validation_images, "labels": validation_labels}
     test_data = {"images": test_images, "labels": test_labels}
 
     output_dir = os.path.join(output_filepath, "CIFAR10")
