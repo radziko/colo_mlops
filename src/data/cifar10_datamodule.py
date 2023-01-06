@@ -32,13 +32,13 @@ class CIFAR10DataModule(pl.LightningDataModule):
         )
 
     def train_dataloader(self):
-        return DataLoader(self.cifar10_train, batch_size=self.batch_size)
+        return DataLoader(self.cifar10_train, batch_size=self.batch_size, num_workers=12)
 
     def val_dataloader(self):
-        return DataLoader(self.cifar10_validation, batch_size=self.batch_size)
+        return DataLoader(self.cifar10_validation, batch_size=self.batch_size, num_workers=12)
 
     def test_dataloader(self):
-        return DataLoader(self.cifar10_test, batch_size=self.batch_size)
+        return DataLoader(self.cifar10_test, batch_size=self.batch_size, num_workers=12)
 
     def predict_dataloader(self):
-        return DataLoader(self.cifar10_test, batch_size=self.batch_size)
+        return DataLoader(self.cifar10_test, batch_size=self.batch_size, num_workers=12)

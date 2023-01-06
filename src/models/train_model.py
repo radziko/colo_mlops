@@ -1,9 +1,10 @@
 import pytorch_lightning as pl
 import timm
 from torch import nn, optim
-
+import hydra
+from omegaconf import OmegaConf
+from src.models.model import simplenet
 from src.data.cifar10_datamodule import CIFAR10DataModule
-
 
 class CIFAR10ViT(pl.LightningModule):
     def __init__(self, classifier: nn.Module):
@@ -25,10 +26,12 @@ class CIFAR10ViT(pl.LightningModule):
         return optimizer
 
 
-classifier = timm.create_model("")
+classifier = simplenet()
 
 model = CIFAR10ViT(classifier)
 
 trainer = pl.Trainer()
 
-trainer.fit(model, CIFAR10DataModule(batch_size=128))
+data = CIFAR10DataModule(batch_size=32)
+
+trainer.fit(model, data)
