@@ -7,7 +7,7 @@ colo_mlops
 The overall goal of the project is to use a classification model to classify images into 10 classes, which include "dog", "truck", "ship" etc. 
 
 #### What framework are you going to use (PyTorch Image Models, Transformer, Pytorch-Geometrics)
-We are dealing with an image classification class, hence the [PyTorch Image Models](https://github.com/rwightman/pytorch-image-models) will be used. 
+Unfortunately, this project will not deploy 
 
 #### How do you intend to include the framework into your project
 For a start, the framework will be used to obtain atleast one pretrained model, which will form the base of doing transfer learning; doing further training and evaluation of the model.
