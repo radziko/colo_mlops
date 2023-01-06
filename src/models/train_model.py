@@ -29,7 +29,7 @@ class CIFAR10ViT(pl.LightningModule):
         return optimizer
 
 
-classifier = timm.create_model("")
+classifier = timm.create_model("resnet18")
 
 model = CIFAR10ViT(classifier)
 
