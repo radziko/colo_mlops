@@ -33,6 +33,6 @@ classifier = timm.create_model("")
 
 model = CIFAR10ViT(classifier)
 
-trainer = pl.Trainer(logger=wandb_logger)
+trainer = pl.Trainer(logger=wandb_logger, default_root_dir="models/")
 
 trainer.fit(model, CIFAR10DataModule(batch_size=128))
