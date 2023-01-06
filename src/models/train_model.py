@@ -5,7 +5,7 @@ from torch import nn, optim
 from src.data.cifar10_datamodule import CIFAR10DataModule
 from pytorch_lightning.loggers import WandbLogger
 
-wandb_logger = WandbLogger(project="mlops_project")
+wandb_logger = WandbLogger(project="mlops_project", log_model=False)
 
 
 class CIFAR10ViT(pl.LightningModule):
@@ -29,10 +29,10 @@ class CIFAR10ViT(pl.LightningModule):
         return optimizer
 
 
-classifier = timm.create_model("")
+classifier = timm.create_model("resnet18")
 
 model = CIFAR10ViT(classifier)
 
-trainer = pl.Trainer(logger=wandb_logger)
+trainer = pl.Trainer(logger=wandb_logger, default_root_dir="models/")
 
 trainer.fit(model, CIFAR10DataModule(batch_size=128))
