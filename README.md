@@ -1,16 +1,20 @@
 colo_mlops
 ==============================
+Carl Anton Schmidt
+Joachim Schrøder Andersson
+Jonas Hoffmann
+Julius Radzikowski
 
 ## Project Description for Week 1:
 
 #### Overall goal of the project
-The overall goal of the project is to use a classification model to classify images into 10 classes, which include "dog", "truck", "ship" etc. 
+The overall goal of the project is to use a deep learning classification model, to classify images from the CIFAR-10 dataset into 10 classes, which include "dog", "truck", "ship" amongst others. Another main goal of the project is to deploy as many of the tools from the course as possible, to make this project easy to understand and reproduce.
 
 #### What framework are you going to use (PyTorch Image Models, Transformer, Pytorch-Geometrics)
 This project will deploy the framework [PyTorch Image Models](https://github.com/rwightman/pytorch-image-models), since we will be working with image classification.
 
 #### How do you intend to include the framework into your project
-The framework will be used to obtain a pretrained version of the model Resnet18, which will form the base of doing transfer learning; doing further training and evaluation of the model. 
+The framework will be used to obtain a pretrained version of the model Resnet18, which will form the base of doing transfer learning; doing further fine-tuning and then evaluation of the model. Other versions of ResNet might be tested, also from TIMM (Pytorch Image Models). 
 
 #### What data are you going to run on (initially, may change)
 Initially, the data to be used is the [CIFAR-10 dataset](https://www.cs.toronto.edu/~kriz/cifar.html). The dataset consists of 60000 images distributed equally between 10 classes. An image is 32x32 and contains color. This dataset was chosen due to its simplicity for use in image classification since the overarching goal of this project is to deploy MLOps tools.
