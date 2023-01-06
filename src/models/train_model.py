@@ -5,7 +5,7 @@ from torch import nn, optim
 from src.data.cifar10_datamodule import CIFAR10DataModule
 from pytorch_lightning.loggers import WandbLogger
 
-wandb_logger = WandbLogger(project="mlops_project")
+wandb_logger = WandbLogger(project="mlops_project", log_model=False)
 
 
 class CIFAR10ViT(pl.LightningModule):
