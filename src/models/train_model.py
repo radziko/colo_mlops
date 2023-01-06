@@ -5,7 +5,9 @@ import hydra
 from omegaconf import OmegaConf
 from src.models.model import simplenet
 from src.data.cifar10_datamodule import CIFAR10DataModule
-import os
+from pytorch_lightning.loggers import WandbLogger
+
+wandb_logger = WandbLogger(project="mlops_project", log_model=False)
 
 class CIFAR10ViT(pl.LightningModule):
     def __init__(self, classifier: nn.Module, lr: float = 1e-3):
@@ -20,6 +22,7 @@ class CIFAR10ViT(pl.LightningModule):
         y_hat = self.classifier(x)
 
         loss = self.loss(y_hat, y)
+        self.log('training_loss', loss)
 
         return loss
 
@@ -40,7 +43,10 @@ def train(config):
     trainer = pl.Trainer(
         accelerator=hparams['accelerator'],
         max_epochs=hparams['n_epochs'],
-        auto_lr_find=hparams['auto_lr_find'])
+        auto_lr_find=hparams['auto_lr_find'],
+        logger=wandb_logger, 
+        default_root_dir="models/")
+
 
     org_cwd = hydra.utils.get_original_cwd()
 
