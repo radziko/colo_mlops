@@ -1,0 +1,7 @@
+# @package _group_
+seed: 123
+lr: 0.01
+n_epochs: 30
+batch_size: 32
+auto_lr_find: True
+accelerator: 'auto'
