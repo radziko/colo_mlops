@@ -3,6 +3,9 @@ import timm
 from torch import nn, optim
 
 from src.data.cifar10_datamodule import CIFAR10DataModule
+from pytorch_lightning.loggers import WandbLogger
+
+wandb_logger = WandbLogger(project="mlops_project")
 
 
 class CIFAR10ViT(pl.LightningModule):
@@ -17,6 +20,7 @@ class CIFAR10ViT(pl.LightningModule):
         y_hat = self.classifier(x)
 
         loss = self.loss(y_hat, y)
+        self.log('training_loss', loss)
 
         return loss
 
@@ -29,6 +33,6 @@ classifier = timm.create_model("")
 
 model = CIFAR10ViT(classifier)
 
-trainer = pl.Trainer()
+trainer = pl.Trainer(logger=wandb_logger)
 
 trainer.fit(model, CIFAR10DataModule(batch_size=128))
