@@ -21,7 +21,7 @@ From the before-mentioned model-framework, the RestNet18 model ([Documentation](
 
 MLOps project
 ## Commands to use:
-1. Load data from dvc:  "pull dvc"
+1. Load data from dvc:  "dvc pull"
 2. Use dataprocessor:   "make data" OR "python src/data/make_dataset.py data/raw data/processed"
 
 
