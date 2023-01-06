@@ -1,9 +1,13 @@
 colo_mlops
 ==============================
 Carl Anton Schmidt
+
 Joachim Schrøder Andersson
+
 Jonas Hoffmann
+
 Julius Radzikowski
+
 
 ## Project Description for Week 1:
 
