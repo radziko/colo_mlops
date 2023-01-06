@@ -1,8 +1,7 @@
 import pytorch_lightning as pl
-import torch
 import hydra
 from omegaconf import OmegaConf
-from src.models.model import CIFAR10ViT, simplenet
+from src.models.model import CIFAR10ViT, get_model
 from src.data.cifar10_datamodule import CIFAR10DataModule
 from pytorch_lightning.loggers import WandbLogger
 
@@ -16,7 +15,7 @@ def train(config):
 
     hparams = config.experiment
     pl.seed_everything(hparams['seed'])
-    model = CIFAR10ViT(classifier=simplenet(), lr=hparams['lr'])
+    model = CIFAR10ViT(classifier=get_model('resnet18', True), lr=hparams['lr'])
 
     trainer = pl.Trainer(
         accelerator=hparams['accelerator'],
