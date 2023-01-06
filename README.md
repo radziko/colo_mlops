@@ -7,16 +7,16 @@ colo_mlops
 The overall goal of the project is to use a classification model to classify images into 10 classes, which include "dog", "truck", "ship" etc. 
 
 #### What framework are you going to use (PyTorch Image Models, Transformer, Pytorch-Geometrics)
-Unfortunately, this project will not deploy 
+This project will deploy the framework [PyTorch Image Models](https://github.com/rwightman/pytorch-image-models), since we will be working with image classification.
 
 #### How do you intend to include the framework into your project
-For a start, the framework will be used to obtain atleast one pretrained model, which will form the base of doing transfer learning; doing further training and evaluation of the model.
+The framework will be used to obtain a pretrained version of the model Resnet18, which will form the base of doing transfer learning; doing further training and evaluation of the model. 
 
 #### What data are you going to run on (initially, may change)
-Initially, the data to be used is the [CIFAR-10 dataset](https://www.cs.toronto.edu/~kriz/cifar.html). The dataset consists of 60000 images distributed equally between 10 classes. An image is 32x32 and contains color. 
+Initially, the data to be used is the [CIFAR-10 dataset](https://www.cs.toronto.edu/~kriz/cifar.html). The dataset consists of 60000 images distributed equally between 10 classes. An image is 32x32 and contains color. This dataset was chosen due to its simplicity for use in image classification since the overarching goal of this project is to deploy MLOps tools.
 
 #### What deep learning models do you expect to use
-From the before-mentioned model-framework, the RestNet model ([Documentation](https://arxiv.org/abs/1512.03385)) is planned to be used.
+From the before-mentioned model-framework, the RestNet18 model ([Documentation](https://arxiv.org/abs/1512.03385)) is planned to be used. We might try out additional models if time allow us to do so. 
 
 
 MLOps project
