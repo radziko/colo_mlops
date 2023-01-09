@@ -30,7 +30,7 @@ def get_logger(config: dict) -> Optional[Logger]:
 def train(config):
     print(f"configuration: \n {OmegaConf.to_yaml(config)}")
 
-    hparams = config.experiment
+    hparams = config.training
     pl.seed_everything(hparams["seed"])
     model = CIFAR10Model(classifier=get_model("resnet18", False), lr=hparams["lr"])
 
