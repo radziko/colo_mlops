@@ -42,8 +42,8 @@ def main(input_filepath, output_filepath, seed):
             transforms.ToTensor(),
             transforms.Lambda(
                 lambda x: x.view(-1, 3, 32, 32)
-                #.swapdims(1, 3)
-                #.swapdims(1, 2)  # Have to swap dimensions twice to avoid transpose
+                # .swapdims(1, 3)
+                # .swapdims(1, 2)  # Have to swap dimensions twice to avoid transpose
             ),  # Convert it to square images
             transforms.Normalize((0,), (1,)),  # Then standardize
         ]

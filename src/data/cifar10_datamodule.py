@@ -1,6 +1,5 @@
 import os
 
-import matplotlib.pyplot as plt
 import pytorch_lightning as pl
 import torch
 from torch.utils.data import DataLoader, TensorDataset
@@ -10,11 +9,18 @@ class CIFAR10DataModule(pl.LightningDataModule):
     cifar10_train: TensorDataset
     cifar10_validation: TensorDataset
     cifar10_test: TensorDataset
+    num_workers: int
 
-    def __init__(self, data_dir: str = "data/processed/CIFAR10", batch_size: int = 32):
+    def __init__(
+        self,
+        data_dir: str = "data/processed/CIFAR10",
+        batch_size: int = 32,
+        num_workers: int = 4,
+    ):
         super().__init__()
         self.data_dir = data_dir
         self.batch_size = batch_size
+        self.num_workers = num_workers
 
     def setup(self, stage: str):
         train_dataset = torch.load(os.path.join(self.data_dir, "train.pt"))
@@ -32,13 +38,23 @@ class CIFAR10DataModule(pl.LightningDataModule):
         )
 
     def train_dataloader(self):
-        return DataLoader(self.cifar10_train, batch_size=self.batch_size, num_workers=12)
+        return DataLoader(
+            self.cifar10_train, batch_size=self.batch_size, num_workers=self.num_workers
+        )
 
     def val_dataloader(self):
-        return DataLoader(self.cifar10_validation, batch_size=self.batch_size,num_workers=12)
+        return DataLoader(
+            self.cifar10_validation,
+            batch_size=self.batch_size,
+            num_workers=self.num_workers,
+        )
 
     def test_dataloader(self):
-        return DataLoader(self.cifar10_test, batch_size=self.batch_size,num_workers=12)
+        return DataLoader(
+            self.cifar10_test, batch_size=self.batch_size, num_workers=self.num_workers
+        )
 
     def predict_dataloader(self):
-        return DataLoader(self.cifar10_test, batch_size=self.batch_size,num_workers=12)
+        return DataLoader(
+            self.cifar10_test, batch_size=self.batch_size, num_workers=self.num_workers
+        )

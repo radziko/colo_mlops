@@ -1,40 +1,94 @@
-'''
+"""
 SimplerNetV1 in Pytorch.
 The implementation is basded on : 
 https://github.com/D-X-Y/ResNeXt-DenseNet
-'''
-import torch
-import torch.nn as nn
-from torch.autograd import Variable
-import torch.nn.functional as F
+"""
+
 import pytorch_lightning as pl
-from torch import nn, optim
 import timm
+from torch import nn, optim
+from torchmetrics import (AUROC, Accuracy, F1Score, MetricCollection,
+                          Precision, Recall)
 
 
-def get_model(model: str, pretrained:bool=False):
-    our_model = timm.create_model(model, pretrained=pretrained)
+def get_model(model: str, pretrained: bool = False):
+    our_model = timm.create_model(model, pretrained=pretrained, num_classes=10)
     return our_model
 
 
-class CIFAR10ViT(pl.LightningModule):
+class CIFAR10Model(pl.LightningModule):
     def __init__(self, classifier: nn.Module, lr: float = 1e-3):
         super().__init__()
         self.classifier = classifier
         self.loss = nn.CrossEntropyLoss()
         self.lr = lr
-        self.save_hyperparameters()
+        self.save_hyperparameters(ignore=["classifier"])
+
+        self.train_metrics = MetricCollection(
+            {
+                "train/accuracy": Accuracy(task="multiclass", num_classes=10),
+                "train/auroc": AUROC(task="multiclass", num_classes=10),
+            }
+        )
+
+        self.validation_metrics = MetricCollection(
+            {
+                "val/accuracy": Accuracy(task="multiclass", num_classes=10),
+                "val/auroc": AUROC(task="multiclass", num_classes=10),
+                "val/f1": F1Score(task="multiclass", num_classes=10),
+                "val/precision": Precision(task="multiclass", num_classes=10),
+                "val/recall": Recall(task="multiclass", num_classes=10),
+            }
+        )
+
+        self.test_metrics = MetricCollection(
+            {
+                "test/accuracy": Accuracy(task="multiclass", num_classes=10),
+                "test/auroc": AUROC(task="multiclass", num_classes=10),
+                "test/f1": F1Score(task="multiclass", num_classes=10),
+                "test/precision": Precision(task="multiclass", num_classes=10),
+                "test/recall": Recall(task="multiclass", num_classes=10),
+            }
+        )
 
     def training_step(self, batch, batch_idx):
         x, y = batch
 
         y_hat = self.classifier(x)
 
+        self.train_metrics.update(y_hat, y)
+
         loss = self.loss(y_hat, y)
-        self.log('training_loss', loss)
+        self.log("training_loss", loss)
+        self.log_dict(self.train_metrics.compute(), on_step=True, on_epoch=True)
 
         return loss
 
+    def validation_step(self, batch, batch_idx):
+        x, y = batch
+
+        y_hat = self.classifier(x)
+
+        self.validation_metrics.update(y_hat, y)
+
+        loss = self.loss(y_hat, y)
+        self.log("validation_loss", loss)
+        self.log_dict(self.validation_metrics.compute(), on_step=False, on_epoch=True)
+
+        return loss
+
+    def test_step(self, batch, batch_idx):
+        x, y = batch
+
+        y_hat = self.classifier(x)
+
+        self.test_metrics.update(y_hat, y)
+
+        loss = self.loss(y_hat, y)
+        self.log("test_loss", loss)
+        self.log_dict(self.test_metrics.compute(), on_step=False, on_epoch=True)
+
+        return loss
 
     def configure_optimizers(self):
         optimizer = optim.Adam(self.parameters(), lr=self.lr)
