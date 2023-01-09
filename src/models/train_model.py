@@ -1,34 +1,16 @@
 import multiprocessing
 import os
-from typing import Optional
 
 import hydra
 import pytorch_lightning as pl
 from omegaconf import OmegaConf
-from pytorch_lightning.loggers import Logger, TensorBoardLogger, WandbLogger
 
 from src.data.cifar10_datamodule import CIFAR10DataModule
 from src.models.callbacks.log_validation_predictions_callback import (
     LogValidationPredictionsCallback,
 )
-from src.models.model import CIFAR10Model, get_model
-
-
-def get_logger(config: dict) -> Optional[Logger]:
-    if config["logger"] == "wandb":
-        logger = WandbLogger(
-            project="mlops_project",
-            log_model="all",
-            entity="team-colo",
-            save_dir="outputs/wandb/",
-            prefix="train",
-        )
-    elif config["logger"] == "tensorboard":
-        logger = TensorBoardLogger("outputs", "runs")
-    else:
-        logger = None
-
-    return logger
+from src.models.model import CIFAR10Module, get_model
+from src.utils.logger import get_logger
 
 
 @hydra.main(
@@ -39,7 +21,7 @@ def train(config):
 
     hparams = config.training
     pl.seed_everything(hparams["seed"])
-    model = CIFAR10Model(classifier=get_model("resnet18", False), lr=hparams["lr"])
+    model = CIFAR10Module(classifier=get_model("resnet18", False), lr=hparams["lr"])
 
     log_predictions_callback = LogValidationPredictionsCallback()
     model_checkpoint_callback = pl.callbacks.ModelCheckpoint(

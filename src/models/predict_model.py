@@ -1,29 +1,15 @@
 import multiprocessing
 import os
 from pathlib import Path
-from typing import Optional
 
 import hydra
 import pytorch_lightning as pl
-import wandb
+from load_model_artifact import load_model_artifact
 from omegaconf import OmegaConf
-from pytorch_lightning.loggers import Logger, TensorBoardLogger, WandbLogger
 
 from src.data.cifar10_datamodule import CIFAR10DataModule
-from src.models.model import CIFAR10Model
-
-
-def get_logger(config: dict) -> Optional[Logger]:
-    if config["logger"] == "wandb":
-        logger = WandbLogger(
-            project="mlops_project", log_model=False, entity="team-colo"
-        )
-    elif config["logger"] == "tensorboard":
-        logger = TensorBoardLogger("outputs", "runs")
-    else:
-        logger = None
-
-    return logger
+from src.models.model import CIFAR10Module
+from src.utils.logger import get_logger
 
 
 @hydra.main(
@@ -32,16 +18,13 @@ def get_logger(config: dict) -> Optional[Logger]:
 def predict(config):
     print(f"configuration: \n {OmegaConf.to_yaml(config.testing)}")
 
-    run = wandb.init(entity="team-colo", project="mlops_project")
-
     hparams = config.testing
     pl.seed_everything(hparams["seed"])
 
-    checkpoint_reference = "team-colo/mlops_project/" + hparams["ckpt_path"]
-    artifact = run.use_artifact(checkpoint_reference, type="model")
-    artifact_dir = artifact.download(root="models")
+    logger = get_logger(hparams)
 
-    model = CIFAR10Model().load_from_checkpoint(Path(artifact_dir) / "model.ckpt")
+    artifact_dir = load_model_artifact(logger, hparams["ckpt_path"])
+    model = CIFAR10Module().load_from_checkpoint(Path(artifact_dir) / "model.ckpt")
 
     org_cwd = hydra.utils.get_original_cwd()
     data = CIFAR10DataModule(
@@ -50,9 +33,7 @@ def predict(config):
         num_workers=multiprocessing.cpu_count(),
     )
 
-    trainer = pl.Trainer(
-        accelerator=hparams["accelerator"],
-    )
+    trainer = pl.Trainer(accelerator=hparams["accelerator"], logger=logger)
 
     trainer.test(model=model, dataloaders=data)
 
