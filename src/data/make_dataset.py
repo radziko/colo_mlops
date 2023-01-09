@@ -9,10 +9,7 @@ import numpy as np
 import torch
 from dotenv import find_dotenv, load_dotenv
 from sklearn.model_selection import train_test_split
-from torch import Generator
-from torch.utils.data import random_split
 from torchvision import transforms
-from torchvision.datasets import CIFAR10
 
 
 @click.command()

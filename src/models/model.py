@@ -1,23 +1,25 @@
 """
 SimplerNetV1 in Pytorch.
-The implementation is basded on : 
+The implementation is basded on :
 https://github.com/D-X-Y/ResNeXt-DenseNet
 """
 
 import pytorch_lightning as pl
 import timm
-from torch import nn, optim
-from torchmetrics import (AUROC, Accuracy, F1Score, MetricCollection,
-                          Precision, Recall)
 import torch
+from torch import nn, optim
+from torchmetrics import AUROC, Accuracy, F1Score, MetricCollection, Precision, Recall
 
 
 def get_model(model: str, pretrained: bool = False):
     our_model = timm.create_model(model, pretrained=pretrained, num_classes=10)
     return our_model
 
+
 class CIFAR10Model(pl.LightningModule):
-    def __init__(self, classifier: nn.Module = get_model("resnet18", False), lr: float = 1e-3):
+    def __init__(
+        self, classifier: nn.Module = get_model("resnet18", False), lr: float = 1e-3
+    ):
         super().__init__()
         self.classifier = classifier
         self.loss = nn.CrossEntropyLoss()
@@ -63,7 +65,6 @@ class CIFAR10Model(pl.LightningModule):
         self.log_dict(self.train_metrics.compute(), on_step=True, on_epoch=True)
 
         return loss
-        
 
     def validation_step(self, batch, batch_idx):
         x, y = batch
