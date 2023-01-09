@@ -31,6 +31,8 @@ MLOps project
 ## Commands to use:
 1. Load data from dvc:  "dvc pull"
 2. Use dataprocessor:   "make data" OR "python src/data/make_dataset.py data/raw data/processed"
+3. Train model:         "python src/models/train_model.py"
+4. Test model:          "python src/models/predict_model.py"
 
 
 Project Organization

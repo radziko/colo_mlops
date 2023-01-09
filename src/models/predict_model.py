@@ -28,7 +28,7 @@ def get_logger(config: dict) -> Optional[Logger]:
     config_path="../../config", config_name="default_config.yaml", version_base="1.2"
 )
 def predict(config):
-    print(f"configuration: \n {OmegaConf.to_yaml(config)}")
+    print(f"configuration: \n {OmegaConf.to_yaml(config.testing)}")
 
     run = wandb.init(entity='team-colo', project='mlops_project')
 

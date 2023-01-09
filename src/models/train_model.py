@@ -32,7 +32,7 @@ def get_logger(config: dict) -> Optional[Logger]:
     config_path="../../config", config_name="default_config.yaml", version_base="1.2"
 )
 def train(config):
-    print(f"configuration: \n {OmegaConf.to_yaml(config)}")
+    print(f"configuration: \n {OmegaConf.to_yaml(config.training)}")
 
     hparams = config.training
     pl.seed_everything(hparams["seed"])
@@ -46,6 +46,7 @@ def train(config):
         default_root_dir="models/",
         callbacks=[pl.callbacks.ModelCheckpoint(monitor="val/accuracy", mode="max")]
     )
+    
 
     org_cwd = hydra.utils.get_original_cwd()
     data = CIFAR10DataModule(
