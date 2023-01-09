@@ -42,10 +42,11 @@ Second, install the _pre-commit_ hooks:
 ```bash
 pre-commit install
 ```
-And finally, download the data with ```dvc```:
+And then download the data with ```dvc```:
 ```bash
 dvc pull
 ```
+Finally, copy the ```.env.default``` to ```.env``` and fill out the environment variables.
 
 ## Commands to use:
 1. Load data from dvc:  ```dvc pull```

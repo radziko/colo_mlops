@@ -10,7 +10,7 @@ from omegaconf import OmegaConf
 from pytorch_lightning.loggers import Logger, TensorBoardLogger, WandbLogger
 
 from src.data.cifar10_datamodule import CIFAR10DataModule
-from src.models.model import CIFAR10Model
+from src.models.model import CIFAR10Module
 
 
 def get_logger(config: dict) -> Optional[Logger]:
@@ -41,7 +41,7 @@ def predict(config):
     artifact = run.use_artifact(checkpoint_reference, type="model")
     artifact_dir = artifact.download(root="models")
 
-    model = CIFAR10Model().load_from_checkpoint(Path(artifact_dir) / "model.ckpt")
+    model = CIFAR10Module().load_from_checkpoint(Path(artifact_dir) / "model.ckpt")
 
     org_cwd = hydra.utils.get_original_cwd()
     data = CIFAR10DataModule(

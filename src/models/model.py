@@ -16,7 +16,7 @@ def get_model(model: str, pretrained: bool = False):
     return our_model
 
 
-class CIFAR10Model(pl.LightningModule):
+class CIFAR10Module(pl.LightningModule):
     def __init__(
         self, classifier: nn.Module = get_model("resnet18", False), lr: float = 1e-3
     ):
