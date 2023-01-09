@@ -18,21 +18,40 @@ The overall goal of the project is to use a deep learning classification model, 
 This project will deploy the framework [PyTorch Image Models](https://github.com/rwightman/pytorch-image-models), since we will be working with image classification.
 
 #### How do you intend to include the framework into your project
-The framework will be used to obtain a pretrained version of the model Resnet18, which will form the base of doing transfer learning; doing further fine-tuning and then evaluation of the model. Other versions of ResNet might be tested, also from TIMM (Pytorch Image Models). 
+The framework will be used to obtain a pretrained version of the model Resnet18, which will form the base of doing transfer learning; doing further fine-tuning and then evaluation of the model. Other versions of ResNet might be tested, also from TIMM (Pytorch Image Models).
 
 #### What data are you going to run on (initially, may change)
 Initially, the data to be used is the [CIFAR-10 dataset](https://www.cs.toronto.edu/~kriz/cifar.html). The dataset consists of 60000 images distributed equally between 10 classes. An image is 32x32 and contains color. This dataset was chosen due to its simplicity for use in image classification since the overarching goal of this project is to deploy MLOps tools.
 
 #### What deep learning models do you expect to use
-From the before-mentioned model-framework, the RestNet18 model ([Documentation](https://arxiv.org/abs/1512.03385)) is planned to be used. We might try out additional models if time allow us to do so. 
+From the before-mentioned model-framework, the RestNet18 model ([Documentation](https://arxiv.org/abs/1512.03385)) is planned to be used. We might try out additional models if time allow us to do so.
 
 
 MLOps project
+
+## Project setup
+First, install all the ```pip``` requirements:
+```bash
+pip install -r requirements.txt
+```
+Or:
+```bash
+make requirements
+```
+Second, install the _pre-commit_ hooks:
+```bash
+pre-commit install
+```
+And finally, download the data with ```dvc```:
+```bash
+dvc pull
+```
+
 ## Commands to use:
-1. Load data from dvc:  "dvc pull"
-2. Use dataprocessor:   "make data" OR "python src/data/make_dataset.py data/raw data/processed"
-3. Train model:         "python src/models/train_model.py"
-4. Test model:          "python src/models/predict_model.py"
+1. Load data from dvc:  ```dvc pull```
+2. Use dataprocessor:   ```make data``` OR ```python src/data/make_dataset.py data/raw data/processed```
+3. Train model:         ```python src/models/train_model.py```
+4. Test model:          ```python src/models/predict_model.py```
 
 
 Project Organization

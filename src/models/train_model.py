@@ -8,8 +8,10 @@ from omegaconf import OmegaConf
 from pytorch_lightning.loggers import Logger, TensorBoardLogger, WandbLogger
 
 from src.data.cifar10_datamodule import CIFAR10DataModule
+from src.models.callbacks.log_validation_predictions_callback import (
+    LogValidationPredictionsCallback,
+)
 from src.models.model import CIFAR10Model, get_model
-from src.models.callbacks import LogValidationPredictionsCallback
 
 
 def get_logger(config: dict) -> Optional[Logger]:
@@ -19,7 +21,7 @@ def get_logger(config: dict) -> Optional[Logger]:
             log_model="all",
             entity="team-colo",
             save_dir="outputs/wandb/",
-            prefix="train"
+            prefix="train",
         )
     elif config["logger"] == "tensorboard":
         logger = TensorBoardLogger("outputs", "runs")
@@ -40,7 +42,9 @@ def train(config):
     model = CIFAR10Model(classifier=get_model("resnet18", False), lr=hparams["lr"])
 
     log_predictions_callback = LogValidationPredictionsCallback()
-    model_checkpoint_callback = pl.callbacks.ModelCheckpoint(monitor="val/accuracy", mode="max")
+    model_checkpoint_callback = pl.callbacks.ModelCheckpoint(
+        monitor="val/accuracy", mode="max"
+    )
 
     trainer = pl.Trainer(
         accelerator=hparams["accelerator"],
@@ -48,7 +52,7 @@ def train(config):
         auto_lr_find=hparams["auto_lr_find"],
         logger=get_logger(hparams),
         default_root_dir="models/",
-        callbacks=[log_predictions_callback, model_checkpoint_callback]
+        callbacks=[log_predictions_callback, model_checkpoint_callback],
     )
 
     org_cwd = hydra.utils.get_original_cwd()
