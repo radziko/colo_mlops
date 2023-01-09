@@ -9,6 +9,7 @@ import timm
 from torch import nn, optim
 from torchmetrics import (AUROC, Accuracy, F1Score, MetricCollection,
                           Precision, Recall)
+import torch
 
 
 def get_model(model: str, pretrained: bool = False):
@@ -63,6 +64,7 @@ class CIFAR10Model(pl.LightningModule):
         self.log_dict(self.train_metrics.compute(), on_step=True, on_epoch=True)
 
         return loss
+        
 
     def validation_step(self, batch, batch_idx):
         x, y = batch
@@ -74,8 +76,8 @@ class CIFAR10Model(pl.LightningModule):
         loss = self.loss(y_hat, y)
         self.log("validation_loss", loss)
         self.log_dict(self.validation_metrics.compute(), on_step=False, on_epoch=True)
-
-        return loss
+        pred_label = torch.argmax(y_hat, dim=1)
+        return pred_label
 
     def test_step(self, batch, batch_idx):
         x, y = batch
@@ -87,8 +89,8 @@ class CIFAR10Model(pl.LightningModule):
         loss = self.loss(y_hat, y)
         self.log("test_loss", loss)
         self.log_dict(self.test_metrics.compute(), on_step=False, on_epoch=True)
-
-        return loss
+        pred_label = torch.argmax(y_hat, dim=1)
+        return pred_label
 
     def configure_optimizers(self):
         optimizer = optim.Adam(self.parameters(), lr=self.lr)

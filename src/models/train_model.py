@@ -45,6 +45,8 @@ class LogPredictionsCallback(Callback):
             n = 10
             x, y = batch
             images = [img for img in x[:n]]
+            print('yyyyyyyy',y.shape)
+            print('outputs',outputs.shape)
             captions = [f'Ground Truth: {y_i} - Prediction: {y_pred}' for y_i, y_pred in zip(y[:n], outputs[:n])]
             
             # Option 1: log images with `WandbLogger.log_image`
