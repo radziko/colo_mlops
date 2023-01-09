@@ -14,7 +14,11 @@ from src.models.model import CIFAR10Model, get_model
 def get_logger(config: dict) -> Optional[Logger]:
     if config["logger"] == "wandb":
         logger = WandbLogger(
-            project="mlops_project", log_model=False, entity="team-colo"
+            project="mlops_project",
+            log_model="all",
+            entity="team-colo",
+            save_dir="outputs/wandb/",
+            prefix="train"
         )
     elif config["logger"] == "tensorboard":
         logger = TensorBoardLogger("outputs", "runs")
@@ -40,6 +44,7 @@ def train(config):
         auto_lr_find=hparams["auto_lr_find"],
         logger=get_logger(hparams),
         default_root_dir="models/",
+        callbacks=[pl.callbacks.ModelCheckpoint(monitor="val/accuracy", mode="max")]
     )
 
     org_cwd = hydra.utils.get_original_cwd()
