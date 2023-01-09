@@ -92,3 +92,12 @@ target/
 
 #outputs
 outputs/
+
+#logs
+lightning_logs/
+
+#downloaded models
+artifacts/
+
+#runs
+models/**.ckpt

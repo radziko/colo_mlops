@@ -17,7 +17,7 @@ def get_model(model: str, pretrained: bool = False):
 
 
 class CIFAR10Model(pl.LightningModule):
-    def __init__(self, classifier: nn.Module, lr: float = 1e-3):
+    def __init__(self, classifier: nn.Module = get_model("resnet18", False), lr: float = 1e-3):
         super().__init__()
         self.classifier = classifier
         self.loss = nn.CrossEntropyLoss()
