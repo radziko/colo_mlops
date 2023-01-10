@@ -4,6 +4,10 @@
 # GLOBALS                                                                       #
 #################################################################################
 
+## Include ENV variables in .env file
+include .env
+#export $(shell sed 's/=.*//' .env)
+
 PROJECT_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 PROFILE = default
 PROJECT_NAME = colo_mlops
@@ -49,6 +53,39 @@ format:
 ## Lint using flake8
 lint:
 	flake8 src
+
+## Build docker image
+docker_build_train:
+	docker build \
+		--build-arg gdrive_client_id=$(GDRIVE_CLIENT_ID) \
+		--build-arg gdrive_client_secret=$(GDRIVE_CLIENT_SECRET) \
+		-t $(PROJECT_NAME):train \
+		.
+
+docker_build_predict:
+	docker build \
+		-t $(PROJECT_NAME):predict \
+		-f predict.dockerfile \
+		.
+
+docker_build: docker_build_train docker_build_predict
+
+docker_train:
+	docker run \
+		--gpus all \
+		-it \
+		--rm \
+		--ipc=host \
+		--env-file .env \
+		colo_mlops:train
+
+docker_predict:
+	docker run --gpus all \
+		-it \
+		--rm \
+		--ipc=host \
+		--env-file .env \
+		colo_mlops:predict
 
 ## Set up python interpreter environment
 create_environment:
