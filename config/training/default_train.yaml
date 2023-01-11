@@ -1,7 +1,7 @@
 seed: 123
 lr: 0.01
 n_epochs: 30
-batch_size: 32
+batch_size: 64
 auto_lr_find: True
 accelerator: 'auto'
 logger: 'wandb'
