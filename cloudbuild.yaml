@@ -12,7 +12,6 @@ steps:
     args:
       - --destination=gcr.io/$PROJECT_ID/train:latest
       - --cache=true
-      - --cache-ttl=6h
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args: [
@@ -23,3 +22,5 @@ steps:
       '--display-name=train-$SHORT_SHA',
       '--worker-pool-spec=machine-type=n1-standard-8,accelerator-type=nvidia-tesla-v100,accelerator-count=1,replica-count=1,container-image-uri=gcr.io/$PROJECT_ID/train:latest',
     ]
+options:
+  machineType: 'N1_HIGHCPU_8'
