@@ -1,5 +1,14 @@
 steps:
-   - name: 'gcr.io/cloud-builders/docker'
-     args: ['build', '-t', 'gcr.io/$PROJECT_ID/train:$SHORT_SHA', '.']
-   - name: 'gcr.io/cloud-builders/docker'
-     args: ['push', 'gcr.io/$PROJECT_ID/train:$SHORT_SHA']
+  - name: python
+    entrypoint: python
+    args: [ "-m", "pip", "install", "--upgrade", "pip" ]
+  - name: python
+    entrypoint: python
+    args: [ "-m", "pip", "install", "dvc[gs]", "--user" ]
+  - name: python
+    entrypoint: python
+    args: [ "-m", "dvc", "pull"]
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/train:$SHORT_SHA', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/train:$SHORT_SHA']
