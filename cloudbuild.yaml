@@ -23,4 +23,4 @@ steps:
       '--worker-pool-spec=machine-type=n1-standard-8,accelerator-type=nvidia-tesla-v100,accelerator-count=1,replica-count=1,container-image-uri=gcr.io/$PROJECT_ID/train:latest',
     ]
 options:
-  machineType: 'e2-standard-8'
+  machineType: 'e2-highcpu-32'
