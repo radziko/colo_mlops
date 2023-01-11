@@ -8,6 +8,7 @@ import pytorch_lightning as pl
 import timm
 import torch
 from torch import nn, optim
+from torch.nn import functional as F
 from torchmetrics import AUROC, Accuracy, F1Score, MetricCollection, Precision, Recall
 
 
@@ -22,7 +23,7 @@ class CIFAR10Module(pl.LightningModule):
     ):
         super().__init__()
         self.classifier = classifier
-        self.loss = nn.CrossEntropyLoss()
+        self.loss = nn.NLLLoss()
         self.lr = lr
         self.save_hyperparameters(ignore=["classifier"])
 
@@ -56,7 +57,7 @@ class CIFAR10Module(pl.LightningModule):
     def training_step(self, batch, batch_idx):
         x, y = batch
 
-        y_hat = self.classifier(x)
+        y_hat = self(x)
 
         self.train_metrics.update(y_hat, y)
 
@@ -69,7 +70,7 @@ class CIFAR10Module(pl.LightningModule):
     def validation_step(self, batch, batch_idx):
         x, y = batch
 
-        y_hat = self.classifier(x)
+        y_hat = self(x)
 
         self.validation_metrics.update(y_hat, y)
 
@@ -83,7 +84,7 @@ class CIFAR10Module(pl.LightningModule):
     def test_step(self, batch, batch_idx):
         x, y = batch
 
-        y_hat = self.classifier(x)
+        y_hat = self(x)
 
         self.test_metrics.update(y_hat, y)
 
@@ -93,6 +94,9 @@ class CIFAR10Module(pl.LightningModule):
 
         pred_label = torch.argmax(y_hat, dim=1)
         return pred_label
+
+    def forward(self, x):
+        return F.log_softmax(self.classifier(x), 1)
 
     def configure_optimizers(self):
         optimizer = optim.Adam(self.parameters(), lr=self.lr)
