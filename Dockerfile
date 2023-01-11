@@ -1,14 +1,10 @@
 FROM python:3.9-slim
-ARG gdrive_client_id
-ARG gdrive_client_secret
 
 WORKDIR /usr/src/app
 
 COPY . .
 
-RUN pip install "dvc[gdrive]"
-RUN dvc remote modify storage gdrive_client_id ${gdrive_client_id}
-RUN dvc remote modify storage gdrive_client_secret ${gdrive_client_secret}
+RUN pip install "dvc[gs]"
 RUN dvc pull
 
 
