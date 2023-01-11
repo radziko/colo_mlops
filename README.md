@@ -55,6 +55,7 @@ Finally, copy the ```.env.default``` to ```.env``` and fill out the environment 
 4. Test model:          ```python src/models/predict_model.py```
 
 
+
 Project Organization
 ------------
 
