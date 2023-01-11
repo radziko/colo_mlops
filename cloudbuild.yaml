@@ -20,7 +20,7 @@ steps:
       'create',
       '--region=europe-west1',
       '--display-name=train-$SHORT_SHA',
-      '--worker-pool-spec=machine-type=n1-standard-8,accelerator-type=NVIDIA_TESLA_V100,accelerator-count=1,replica-count=1,container-image-uri=gcr.io/$PROJECT_ID/train:latest',
+      '--worker-pool-spec=machine-type=n1-standard-8,accelerator-type=NVIDIA_TESLA_T4,accelerator-count=1,replica-count=1,container-image-uri=gcr.io/$PROJECT_ID/train:latest',
     ]
 options:
   machineType: 'N1_HIGHCPU_32'
