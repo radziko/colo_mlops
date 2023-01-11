@@ -8,10 +8,11 @@ steps:
   - name: python
     entrypoint: python
     args: [ "-m", "dvc", "pull"]
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/$PROJECT_ID/train:$SHORT_SHA', '.']
-  - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/$PROJECT_ID/train:$SHORT_SHA']
+  - name: 'gcr.io/kaniko-project/executor:latest'
+    args:
+      - --destination=gcr.io/$PROJECT_ID/train:latest
+      - --cache=true
+      - --cache-ttl=6h
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args: [
@@ -20,7 +21,5 @@ steps:
       'create',
       '--region=europe-west1',
       '--display-name=train-$SHORT_SHA',
-      '--worker-pool-spec=machine-type=n1-standard-8,accelerator-type=nvidia-tesla-v100,accelerator-count=1,replica-count=1,container-image-uri=gcr.io/$PROJECT_ID/train:$SHORT_SHA',
+      '--worker-pool-spec=machine-type=n1-standard-8,accelerator-type=nvidia-tesla-v100,accelerator-count=1,replica-count=1,container-image-uri=gcr.io/$PROJECT_ID/train:latest',
     ]
-images:
-  - gcr.io/$PROJECT_ID/train:$SHORT_SHA
