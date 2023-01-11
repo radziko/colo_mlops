@@ -5,10 +5,10 @@ from typing import Optional
 
 import hydra
 import pytorch_lightning as pl
-import wandb
 from omegaconf import OmegaConf
 from pytorch_lightning.loggers import Logger, TensorBoardLogger, WandbLogger
 
+import wandb
 from src.data.cifar10_datamodule import CIFAR10DataModule
 from src.models.model import CIFAR10Model
 
