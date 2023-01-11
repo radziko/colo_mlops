@@ -57,8 +57,6 @@ lint:
 ## Build docker image
 docker_build_train:
 	docker build \
-		--build-arg gdrive_client_id=$(GDRIVE_CLIENT_ID) \
-		--build-arg gdrive_client_secret=$(GDRIVE_CLIENT_SECRET) \
 		-t $(PROJECT_NAME):train \
 		.
 
