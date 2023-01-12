@@ -16,6 +16,8 @@ from src.utils.logger import get_logger
     config_path="../../config", config_name="default_config.yaml", version_base="1.2"
 )
 def predict(config):
+    ''' Takes a config file and does inference with a trained model on the CIFAR10 test set. '''
+
     print(f"configuration: \n {OmegaConf.to_yaml(config.testing)}")
 
     hparams = config.testing

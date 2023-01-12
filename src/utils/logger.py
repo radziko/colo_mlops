@@ -6,6 +6,15 @@ from pytorch_lightning.loggers import Logger, TensorBoardLogger, WandbLogger
 
 
 def get_logger(config: dict) -> Optional[Logger]:
+    ''' Returns a logger for the model logging.
+
+    Args:
+        config: A config file with a "logger" key stating the logger.
+
+    Returns:
+        logger: The logger for the model.
+    
+    '''
     dotenv_path = find_dotenv()
     load_dotenv(dotenv_path)
 

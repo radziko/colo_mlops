@@ -17,6 +17,8 @@ from src.utils.logger import get_logger
     config_path="../../config", config_name="default_config.yaml", version_base="1.2"
 )
 def train(config):
+    ''' Takes a config file and trains the model. Saves a model checkpoint in weights and biases after each epoch. '''
+
     print(f"configuration: \n {OmegaConf.to_yaml(config.training)}")
 
     hparams = config.training

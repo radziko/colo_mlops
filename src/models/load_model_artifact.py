@@ -5,6 +5,8 @@ from pytorch_lightning.loggers import WandbLogger
 
 
 def load_model_artifact(logger: WandbLogger, checkpoint_reference: str) -> str:
+    ''' Downloads a model checkpoint from weights and biases and saves is it in the "models/" directory. '''
+    
     dotenv_path = find_dotenv()
     load_dotenv(dotenv_path)
 
