@@ -1,3 +1,4 @@
 defaults:
     - training: default_train
     - testing: default_test
+    - app: default_app
