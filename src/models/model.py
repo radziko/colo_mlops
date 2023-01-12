@@ -10,7 +10,7 @@ import torch
 from torch import nn, optim
 from torch.nn import functional as F
 from torchmetrics import AUROC, Accuracy, F1Score, MetricCollection, Precision, Recall
-from typing import Any, Callable, Dict, Generator, List, Mapping, Optional, overload, Sequence, Tuple, Union
+from typing import Tuple
 
 
 def get_model(model: str, pretrained: bool = False):
