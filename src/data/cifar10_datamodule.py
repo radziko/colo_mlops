@@ -38,7 +38,7 @@ class CIFAR10DataModule(pl.LightningDataModule):
         )
 
     def train_dataloader(self):
-        ''' Returns the dataloader for the train set. '''
+        """Returns the dataloader for the train set."""
         return DataLoader(
             self.cifar10_train,
             batch_size=self.batch_size,
@@ -47,7 +47,7 @@ class CIFAR10DataModule(pl.LightningDataModule):
         )
 
     def val_dataloader(self):
-        ''' Returns the dataloader for the validation set. '''
+        """Returns the dataloader for the validation set."""
         return DataLoader(
             self.cifar10_validation,
             batch_size=self.batch_size,
@@ -55,17 +55,13 @@ class CIFAR10DataModule(pl.LightningDataModule):
         )
 
     def test_dataloader(self):
-        ''' Returns the dataloader for the test set. '''
+        """Returns the dataloader for the test set."""
         return DataLoader(
-            self.cifar10_test, 
-            batch_size=self.batch_size, 
-            num_workers=self.num_workers
+            self.cifar10_test, batch_size=self.batch_size, num_workers=self.num_workers
         )
 
     def predict_dataloader(self):
-        ''' Returns the dataloader for the predict (=test) set. '''
+        """Returns the dataloader for the predict (=test) set."""
         return DataLoader(
-            self.cifar10_test, 
-            batch_size=self.batch_size, 
-            num_workers=self.num_workers
+            self.cifar10_test, batch_size=self.batch_size, num_workers=self.num_workers
         )

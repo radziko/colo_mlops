@@ -7,7 +7,7 @@ class LogValidationPredictionsCallback(Callback):
     def on_validation_batch_end(
         self, trainer, pl_module, outputs, batch, batch_idx, dataloader_idx
     ):
-        """ Called when the validation batch ends. """
+        """Called when the validation batch ends."""
 
         # `outputs` comes from `LightningModule.validation_step`
         # which corresponds to our model predictions in this case
