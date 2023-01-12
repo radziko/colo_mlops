@@ -4,6 +4,8 @@ The implementation is basded on :
 https://github.com/D-X-Y/ResNeXt-DenseNet
 """
 
+from typing import Tuple
+
 import pytorch_lightning as pl
 import timm
 import torch
@@ -54,7 +56,17 @@ class CIFAR10Module(pl.LightningModule):
             }
         )
 
-    def training_step(self, batch, batch_idx):
+    def training_step(
+        self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx
+    ) -> torch.Tensor:
+        """Calculates the loss for a batch given to the model.
+
+        Args:
+            batch: A batch of a predetermined batch size from the CIFAR10 dataset.
+
+        Returns:
+            loss: The PyTorch NLLLoss on the batch.
+        """
         x, y = batch
 
         y_hat = self(x)
@@ -67,7 +79,18 @@ class CIFAR10Module(pl.LightningModule):
 
         return loss
 
-    def validation_step(self, batch, batch_idx):
+    def validation_step(
+        self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx
+    ) -> list[int]:
+        """Calculates the predicted labels for a batch given during validation.
+
+        Args:
+            batch: A batch from the CIFAR10 dataset.
+
+        Returns:
+            pred_label: The predicted label of each data point on the batch,
+            i.e. 64 predicted labels if batch_size=64.
+        """
         x, y = batch
 
         y_hat = self(x)
@@ -81,7 +104,18 @@ class CIFAR10Module(pl.LightningModule):
         pred_label = torch.argmax(y_hat, dim=1)
         return pred_label
 
-    def test_step(self, batch, batch_idx):
+    def test_step(
+        self, batch: Tuple[torch.Tensor, torch.Tensor], batch_idx
+    ) -> list[int]:
+        """Calculates the predicted labels for a batch given during testing.
+
+        Args:
+            batch: A batch from the CIFAR10 dataset.
+
+        Returns:
+            pred_label: The predicted label of each data point on the batch,
+            i.e. 64 predicted labels if batch_size=64.
+        """
         x, y = batch
 
         y_hat = self(x)
@@ -95,9 +129,24 @@ class CIFAR10Module(pl.LightningModule):
         pred_label = torch.argmax(y_hat, dim=1)
         return pred_label
 
-    def forward(self, x):
-        return F.log_softmax(self.classifier(x), 1)
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
+        """Adds a layer of log softmax to the forward pass
+        to calculate the log-probabilites from NLLLoss.
+
+        Args:
+            batch: A batch from the CIFAR10 dataset.
+
+        Returns:
+            pred_label: The log-probabilites for a batch.
+        """
+        return F.log_softmax(self.classifier(x), dim=1)
 
     def configure_optimizers(self):
+        """Configures the optimizer used during training.
+
+        Returns:
+            optimizer: The optimizer for training,
+            which in this case is the ADAM optimizer.
+        """
         optimizer = optim.Adam(self.parameters(), lr=self.lr)
         return optimizer
