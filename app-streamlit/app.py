@@ -79,7 +79,7 @@ if __name__ == "__main__":
     # For newline
     st.write("\n")
 
-    image = Image.open("images/image.png")
+    image = Image.open("app-streamlit/images/image.png")
     show = st.image(image, use_column_width=True)
 
     st.sidebar.title("Upload Image")
