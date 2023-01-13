@@ -1,4 +1,3 @@
-import os
 import time
 from pathlib import Path
 
@@ -13,7 +12,7 @@ from src.models.model import CIFAR10Module
 from src.utils.logger import get_logger
 
 # @hydra.main(
-#    config_path="../config", config_name="default_config.yaml", version_base="1.2")
+#   config_path="../config", config_name="default_config.yaml", version_base="1.2")
 
 
 @st.experimental_memo
@@ -33,7 +32,7 @@ def predict(model, input, categories):
 
     for id, prob in zip(top5_catid[0], top5_prob[0]):
         # print(id, prob[0])
-        st.sidebar.write(categories[id.item()], round(prob.item(), 3))
+        st.write(categories[id.item()], round(prob.item(), 3))
 
 
 def transformation(input_img):
@@ -55,7 +54,7 @@ def transformation(input_img):
 
 def main():
     st.markdown("# Upload an image to classify")
-    st.sidebar.markdown("# Upload an image to classify")
+    st.sidebar.markdown("# Classify your own image")
     st.text("Use our model to predict an image of your own.")
 
     model = get_model()
@@ -74,30 +73,26 @@ def main():
         "truck",
     ]
 
-    if os.path.exists("images/image.png"):
-        image = Image.open("images/image.png")
-        show = st.image(image, use_column_width=True)
-
     # Disabling warning
     st.set_option("deprecation.showfileUploaderEncoding", False)
     # Choose your own image
-    uploaded_file = st.sidebar.file_uploader(" ", type=["png", "jpg", "jpeg"])
+    uploaded_file = st.file_uploader(" ", type=["png", "jpg", "jpeg"])
 
     if uploaded_file is not None:
         u_img = Image.open(uploaded_file)
-        show.image(u_img, "Uploaded Image", use_column_width=True)
+        st.image(u_img, "Uploaded Image", use_column_width=True)
         # We preprocess the image to fit in algorithm.
         my_image = transformation(u_img)
 
     st.sidebar.write("\n")
 
-    if st.sidebar.button("Click Here to Classify"):
+    if st.button("Click Here to Classify"):
         if uploaded_file is None:
-            st.sidebar.write("Please upload an Image to Classify")
+            st.write("Please upload an Image to Classify")
 
         else:
             with st.spinner("Classifying ..."):
-                st.sidebar.header("Algorithm Predicts: ")
+                st.header("Algorithm Predicts: ")
                 time.sleep(2)
                 predict(model, my_image, categories)
 
