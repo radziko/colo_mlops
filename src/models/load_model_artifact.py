@@ -5,6 +5,18 @@ from pytorch_lightning.loggers import WandbLogger
 
 
 def load_model_artifact(logger: WandbLogger, checkpoint_reference: str) -> str:
+    """Downloads a model artifact from wandb
+    and saves it for later use.
+
+    Args:
+        - logger: the logger of choice
+        - checkpoint_reference: the checkpoint reference from
+        wandb that shall be loaded.
+
+
+    Returns:
+        logger.download_artifact: returns the downloaded model
+    """
     dotenv_path = find_dotenv()
     load_dotenv(dotenv_path)
 

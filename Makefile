@@ -77,13 +77,11 @@ docker_train:
 		--env-file .env \
 		colo_mlops:train
 
-docker_predict:
-	docker run --gpus all \
-		-it \
-		--rm \
-		--ipc=host \
+docker_app:
+	docker run \
+		-p 8501:8501 \
 		--env-file .env \
-		colo_mlops:predict
+		app:latest
 
 ## Set up python interpreter environment
 create_environment:
