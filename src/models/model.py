@@ -162,7 +162,7 @@ class CIFAR10Module(pl.LightningModule):
             momentum=0.9,
             weight_decay=5e-4,
         )
-        steps_per_epoch = 45000 // self.hparams.batch_size
+        steps_per_epoch = int(round(45000 / self.hparams.batch_size))
         scheduler_dict = {
             "scheduler": OneCycleLR(
                 optimizer,

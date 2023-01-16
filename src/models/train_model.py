@@ -37,6 +37,7 @@ def train(config):
     early_stopping_callback = pl.callbacks.EarlyStopping(
         monitor="val/accuracy", mode="max", patience=10
     )
+    timer_callback = pl.callbacks.Timer()
 
     trainer = pl.Trainer(
         accelerator=hparams["accelerator"],
@@ -48,6 +49,7 @@ def train(config):
             log_predictions_callback,
             model_checkpoint_callback,
             early_stopping_callback,
+            timer_callback,
         ],
         benchmark=hparams["cudnn_benchmark"],
         precision=hparams["precision"],
