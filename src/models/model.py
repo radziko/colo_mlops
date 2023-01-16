@@ -7,26 +7,37 @@ https://github.com/D-X-Y/ResNeXt-DenseNet
 from typing import Tuple
 
 import pytorch_lightning as pl
-import timm
 import torch
-from torch import nn, optim
+import torchvision.models
+from torch import nn
 from torch.nn import functional as F
+from torch.optim.lr_scheduler import OneCycleLR
 from torchmetrics import AUROC, Accuracy, F1Score, MetricCollection, Precision, Recall
 
 
-def get_model(model: str, pretrained: bool = False):
-    our_model = timm.create_model(model, pretrained=pretrained, num_classes=10)
-    return our_model
+def create_model():
+    model = torchvision.models.resnet18(weights=None, num_classes=10)
+
+    model.conv1 = nn.Conv2d(
+        3, 64, kernel_size=(3, 3), stride=(1, 1), padding=(1, 1), bias=False
+    )
+    model.maxpool = nn.Identity()
+
+    return model
 
 
 class CIFAR10Module(pl.LightningModule):
     def __init__(
-        self, classifier: nn.Module = get_model("resnet18", False), lr: float = 1e-3
+        self,
+        classifier: nn.Module = create_model(),
+        lr: float = 1e-3,
+        batch_size: int = 64,
     ):
         super().__init__()
         self.classifier = classifier
         self.loss = nn.NLLLoss()
         self.lr = lr
+        self.batch_size = batch_size
         self.save_hyperparameters(ignore=["classifier"])
 
         self.train_metrics = MetricCollection(
@@ -40,9 +51,6 @@ class CIFAR10Module(pl.LightningModule):
             {
                 "val/accuracy": Accuracy(task="multiclass", num_classes=10),
                 "val/auroc": AUROC(task="multiclass", num_classes=10),
-                "val/f1": F1Score(task="multiclass", num_classes=10),
-                "val/precision": Precision(task="multiclass", num_classes=10),
-                "val/recall": Recall(task="multiclass", num_classes=10),
             }
         )
 
@@ -74,8 +82,8 @@ class CIFAR10Module(pl.LightningModule):
         self.train_metrics.update(y_hat, y)
 
         loss = self.loss(y_hat, y)
-        self.log("training_loss", loss)
-        self.log_dict(self.train_metrics.compute(), on_step=True, on_epoch=True)
+        self.log("train/loss", loss)
+        self.log_dict(self.train_metrics, on_step=True, on_epoch=False)
 
         return loss
 
@@ -98,8 +106,8 @@ class CIFAR10Module(pl.LightningModule):
         self.validation_metrics.update(y_hat, y)
 
         loss = self.loss(y_hat, y)
-        self.log("validation_loss", loss)
-        self.log_dict(self.validation_metrics.compute(), on_step=False, on_epoch=True)
+        self.log("val/loss", loss)
+        self.log_dict(self.validation_metrics, on_step=False, on_epoch=True)
 
         pred_label = torch.argmax(y_hat, dim=1)
         return pred_label
@@ -123,8 +131,8 @@ class CIFAR10Module(pl.LightningModule):
         self.test_metrics.update(y_hat, y)
 
         loss = self.loss(y_hat, y)
-        self.log("test_loss", loss)
-        self.log_dict(self.test_metrics.compute(), on_step=False, on_epoch=True)
+        self.log("test/loss", loss)
+        self.log_dict(self.test_metrics, on_step=False, on_epoch=True)
 
         pred_label = torch.argmax(y_hat, dim=1)
         return pred_label
@@ -148,5 +156,20 @@ class CIFAR10Module(pl.LightningModule):
             optimizer: The optimizer for training,
             which in this case is the ADAM optimizer.
         """
-        optimizer = optim.Adam(self.parameters(), lr=self.lr)
-        return optimizer
+        optimizer = torch.optim.SGD(
+            self.parameters(),
+            lr=self.hparams.lr,
+            momentum=0.9,
+            weight_decay=5e-4,
+        )
+        steps_per_epoch = 45000 // self.hparams.batch_size
+        scheduler_dict = {
+            "scheduler": OneCycleLR(
+                optimizer,
+                0.1,
+                epochs=self.trainer.max_epochs,
+                steps_per_epoch=steps_per_epoch,
+            ),
+            "interval": "step",
+        }
+        return {"optimizer": optimizer, "lr_scheduler": scheduler_dict}

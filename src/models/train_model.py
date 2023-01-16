@@ -9,7 +9,7 @@ from src.data.cifar10_datamodule import CIFAR10DataModule
 from src.models.callbacks.log_validation_predictions_callback import (
     LogValidationPredictionsCallback,
 )
-from src.models.model import CIFAR10Module, get_model
+from src.models.model import CIFAR10Module, create_model
 from src.utils.logger import get_logger
 
 
@@ -24,11 +24,18 @@ def train(config):
 
     hparams = config.training
     pl.seed_everything(hparams["seed"])
-    model = CIFAR10Module(classifier=get_model("resnet18", False), lr=hparams["lr"])
+    model = CIFAR10Module(
+        classifier=create_model(),
+        lr=hparams["lr"],
+        batch_size=hparams["batch_size"],
+    )
 
     log_predictions_callback = LogValidationPredictionsCallback()
     model_checkpoint_callback = pl.callbacks.ModelCheckpoint(
         monitor="val/accuracy", mode="max"
+    )
+    early_stopping_callback = pl.callbacks.EarlyStopping(
+        monitor="val/accuracy", mode="max", patience=10
     )
 
     trainer = pl.Trainer(
@@ -37,7 +44,12 @@ def train(config):
         auto_lr_find=hparams["auto_lr_find"],
         logger=get_logger(hparams),
         default_root_dir="models/",
-        callbacks=[log_predictions_callback, model_checkpoint_callback],
+        callbacks=[
+            log_predictions_callback,
+            model_checkpoint_callback,
+            early_stopping_callback,
+        ],
+        log_every_n_steps=250,
     )
 
     org_cwd = hydra.utils.get_original_cwd()
@@ -48,6 +60,7 @@ def train(config):
     )
 
     trainer.fit(model, data)
+    trainer.test(model, data)
 
 
 if __name__ == "__main__":

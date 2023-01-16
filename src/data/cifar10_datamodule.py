@@ -27,15 +27,9 @@ class CIFAR10DataModule(pl.LightningDataModule):
         validation_dataset = torch.load(os.path.join(self.data_dir, "validation.pt"))
         test_dataset = torch.load(os.path.join(self.data_dir, "test.pt"))
 
-        self.cifar10_train = TensorDataset(
-            train_dataset["images"], train_dataset["labels"]
-        )
-        self.cifar10_validation = TensorDataset(
-            validation_dataset["images"], validation_dataset["labels"]
-        )
-        self.cifar10_test = TensorDataset(
-            test_dataset["images"], test_dataset["labels"]
-        )
+        self.cifar10_train = train_dataset
+        self.cifar10_validation = validation_dataset
+        self.cifar10_test = test_dataset
 
     def train_dataloader(self):
         """Returns the dataloader for the train set."""
