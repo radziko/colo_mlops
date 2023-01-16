@@ -20,7 +20,7 @@ steps:
       'create',
       '--region=europe-west1',
       '--display-name=train-$SHORT_SHA',
-      '--args="++hydra.job.env_set={WANDB_ENTITY:$_WANDB_ENTITY, WANDB_PROJECT:$_WANDB_PROJECT, WANDB_API_KEY:$_WANDB_API_KEY}"',
+      '--args="^|^++hydra.job.env_set={WANDB_ENTITY:$_WANDB_ENTITY, WANDB_PROJECT:$_WANDB_PROJECT, WANDB_API_KEY:$_WANDB_API_KEY}"',
       '--worker-pool-spec=machine-type=n1-standard-8,accelerator-type=NVIDIA_TESLA_V100,accelerator-count=1,replica-count=1,container-image-uri=gcr.io/$PROJECT_ID/train:latest',
     ]
 options:
