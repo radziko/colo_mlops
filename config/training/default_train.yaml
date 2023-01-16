@@ -2,6 +2,8 @@ seed: 123
 lr: 0.01
 n_epochs: 100
 batch_size: 128
-auto_lr_find: True
+auto_lr_find: False
 accelerator: 'auto'
 logger: 'wandb'
+cudnn_benchmark: True
+precision: 32

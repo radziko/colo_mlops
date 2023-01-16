@@ -49,7 +49,8 @@ def train(config):
             model_checkpoint_callback,
             early_stopping_callback,
         ],
-        log_every_n_steps=250,
+        benchmark=hparams["cudnn_benchmark"],
+        precision=hparams["precision"],
     )
 
     org_cwd = hydra.utils.get_original_cwd()
