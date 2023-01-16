@@ -1,13 +1,3 @@
-FROM python:3.9-slim
-
-WORKDIR /usr/src/app
-
-COPY . .
-
-RUN pip install "dvc[gs]"
-RUN dvc pull
-
-
 FROM nvcr.io/nvidia/pytorch:22.08-py3
 
 # Update and upgrade the dependencies
@@ -20,14 +10,18 @@ COPY requirements.txt requirements.txt
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt --no-cache-dir
 
-# Copy data files
-COPY --from=0 /usr/src/app/data data/
-
 # Copy all files
-COPY . .
+COPY src/ src/
+COPY setup.py setup.py
 
 # Install source as package
 RUN pip install -e .
+
+# Copy Data
+COPY data/ data/
+
+# Copy configs
+COPY config/ config/
 
 # Run train
 ENTRYPOINT ["python", "src/models/train_model.py"]

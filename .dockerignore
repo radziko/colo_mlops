@@ -76,7 +76,6 @@ target/
 .ipynb_checkpoints/
 
 # exclude data from source control by default
-/data/
 /wandb/
 
 # Mac OS-specific storage files
@@ -88,7 +87,6 @@ target/
 
 # Mypy cache
 .mypy_cache/
-/data
 
 #outputs
 outputs/
