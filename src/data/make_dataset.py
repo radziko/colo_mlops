@@ -16,10 +16,16 @@ from torchvision import transforms
 @click.argument("input_filepath", type=click.Path(exists=True))
 @click.argument("output_filepath", type=click.Path())
 @click.option("-s", "--seed", type=int, default=42)
-def main(input_filepath, output_filepath, seed):
+def main(input_filepath: str, output_filepath: str, seed: int):
     """Runs data processing scripts to turn raw data from (../raw) into
     cleaned data ready to be analyzed (saved in ../processed).
+
+    Args:
+        - input_filepath: Filepath for the raw data set.
+        - output_filepath: Filepath for where to save the processed data set.
+        - seed: Seed for the data set split to train/test.
     """
+
     logger = logging.getLogger(__name__)
     logger.info("making final data set from raw data")
 
