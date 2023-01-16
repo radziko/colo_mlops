@@ -102,9 +102,3 @@ artifacts/
 
 #runs
 models/**.ckpt
-
-#ignore model in app
-app-streamlit/models/
-
-# image
-app-streamlit/images/

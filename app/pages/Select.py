@@ -1,3 +1,4 @@
+import os
 import time
 from pathlib import Path
 
@@ -20,7 +21,8 @@ from src.utils.logger import get_logger
 def get_model():
     # print(f"configuration: \n {OmegaConf.to_yaml(config.app)}")
     logger = get_logger({"logger": "wandb"})
-    checkpoint_reference = "model-90it9ou2:best_k"
+    # checkpoint_reference = "model-90it9ou2:best_k"
+    checkpoint_reference = os.environ.get("WANDB_MODELCHECKPOINT")
 
     artifact_dir = load_model_artifact(logger, checkpoint_reference)
     model = CIFAR10Module().load_from_checkpoint(Path(artifact_dir) / "model.ckpt")
