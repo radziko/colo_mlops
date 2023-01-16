@@ -77,11 +77,30 @@ docker_train:
 		--env-file .env \
 		colo_mlops:train
 
-docker_app:
+docker_app_local:
 	docker run \
 		-p 8501:8501 \
 		--env-file .env \
 		app:latest
+
+build_docker_app:
+	docker build \
+		-f app.dockerfile . \
+		-t gcr.io/mlops-374308/app
+
+push_docker_app:
+	docker push \
+		gcr.io/mlops-374308/app
+
+deploy_docker_app:
+	gcloud run deploy app \
+		--image=gcr.io/mlops-374308/app@sha256:574d8405601317085cdd6a40086145d877764d4bdda2f785fe29a89e61a48e83 \
+		--allow-unauthenticated \
+		--port=8501 \
+		--set-env-vars=WANDB_ENTITY=$(WANDB_ENTITY),WANDB_PROJECT=$(WANDB_PROJECT),WANDB_API_KEY=$(WANDB_API_KEY),WANDB_MODELCHECKPOINT=$(WANDB_MODELCHECKPOINT) \
+		--service-account=420212724383-compute@developer.gserviceaccount.com \
+		--region=europe-west1 \
+		--project=mlops-374308
 
 ## Set up python interpreter environment
 create_environment:
