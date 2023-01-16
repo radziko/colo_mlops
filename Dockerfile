@@ -12,6 +12,7 @@ RUN pip install -r requirements.txt --no-cache-dir
 
 # Copy all files
 COPY . .
+COPY data/ data/
 
 # Install source as package
 RUN pip install -e .
