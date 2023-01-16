@@ -22,6 +22,7 @@ def get_model():
     logger = get_logger({"logger": "wandb"})
     # checkpoint_reference = "model-90it9ou2:best_k"
     checkpoint_reference = os.environ.get("WANDB_MODELCHECKPOINT")
+    assert checkpoint_reference is not None
 
     artifact_dir = load_model_artifact(logger, checkpoint_reference)
     model = CIFAR10Module().load_from_checkpoint(Path(artifact_dir) / "model.ckpt")
