@@ -1,17 +1,17 @@
 steps:
-#  - name: python
-#    entrypoint: python
-#    args: [ "-m", "pip", "install", "--upgrade", "pip" ]
-#  - name: python
-#    entrypoint: python
-#    args: [ "-m", "pip", "install", "dvc[gs]", "--user" ]
-#  - name: python
-#    entrypoint: python
-#    args: [ "-m", "dvc", "pull"]
-#  - name: 'gcr.io/kaniko-project/executor:latest'
-#    args:
-#      - --destination=gcr.io/$PROJECT_ID/train:latest
-#      - --cache=true
+  - name: python
+    entrypoint: python
+    args: [ "-m", "pip", "install", "--upgrade", "pip" ]
+  - name: python
+    entrypoint: python
+    args: [ "-m", "pip", "install", "dvc[gs]", "--user" ]
+  - name: python
+    entrypoint: python
+    args: [ "-m", "dvc", "pull"]
+  - name: 'gcr.io/kaniko-project/executor:latest'
+    args:
+      - '--destination=gcr.io/$PROJECT_ID/train:latest'
+      - '--cache=true'
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud
     args: [
@@ -23,7 +23,7 @@ steps:
       '--args=++hydra.job.env_set.WANDB_ENTITY=$_WANDB_ENTITY',
       '--args=++hydra.job.env_set.WANDB_PROJECT=$_WANDB_PROJECT',
       '--args=++hydra.job.env_set.WANDB_API_KEY=$_WANDB_API_KEY',
-      '--worker-pool-spec=machine-type=n1-standard-8,accelerator-type=NVIDIA_TESLA_T4,accelerator-count=1,container-image-uri=gcr.io/$PROJECT_ID/train:latest',
+      '--worker-pool-spec=machine-type=n1-standard-8,container-image-uri=gcr.io/$PROJECT_ID/train:latest',
     ]
 options:
   machineType: 'N1_HIGHCPU_32'
