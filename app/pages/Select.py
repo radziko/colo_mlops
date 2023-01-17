@@ -13,6 +13,7 @@ from src.models.load_model_artifact import load_model_artifact
 from src.models.model import CIFAR10Module
 from src.utils.logger import get_logger
 
+
 @st.experimental_memo
 def get_model():
     logger = get_logger({"logger": "wandb"})
