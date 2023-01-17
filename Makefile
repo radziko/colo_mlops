@@ -57,16 +57,37 @@ lint:
 ## Build docker image
 docker_build_train:
 	docker build \
-		-t $(PROJECT_NAME):train \
+		-f dockerfiles/train.dockerfile \
+		-t gcr.io/$(GCP_PROJECT)/train:latest \
 		.
 
 docker_build_predict:
 	docker build \
-		-t $(PROJECT_NAME):predict \
-		-f predict.dockerfile \
+		-f dockerfiles/predict.dockerfile \
+		-t gcr.io/$(GCP_PROJECT)/predict:latest \
 		.
 
-docker_build: docker_build_train docker_build_predict
+docker_build_app:
+	docker build \
+		-f dockerfiles/app.dockerfile \
+		-t gcr.io/$(GCP_PROJECT)/app:latest \
+		.
+
+docker_build: docker_build_train docker_build_predict docker_build_app
+
+docker_push_train:
+	docker push \
+		gcr.io/$(GCP_PROJECT)/train:latest
+
+docker_push_predict:
+	docker push \
+		gcr.io/$(GCP_PROJECT)/predict:latest
+
+docker_push_app:
+	docker push \
+		gcr.io/$(GCP_PROJECT)/app:latest
+
+docker_push: docker_push_train docker_push_predict docker_push_app
 
 docker_train:
 	docker run \
@@ -75,24 +96,20 @@ docker_train:
 		--rm \
 		--ipc=host \
 		--env-file .env \
-		colo_mlops:train
+		gcr.io/$(GCP_PROJECT)/train:latest
 
-docker_app_local:
+docker_predict:
+	docker run \
+		gcr.io/$(GCP_PROJECT)/predict:latest
+
+
+docker_deploy_app_local:
 	docker run \
 		-p 8501:8501 \
 		--env-file .env \
 		app:latest
 
-build_docker_app:
-	docker build \
-		-f app.dockerfile . \
-		-t gcr.io/$(GCP_PROJECT)/app
-
-push_docker_app:
-	docker push \
-		gcr.io/$(GCP_PROJECT)/app
-
-deploy_docker_app:
+docker_deploy_app_cloud:
 	gcloud run deploy app \
 		--image=gcr.io/$(GCP_PROJECT)/app:latest \
 		--allow-unauthenticated \
