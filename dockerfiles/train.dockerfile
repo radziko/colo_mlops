@@ -6,22 +6,22 @@ RUN apt update && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
 # Install requirements
-COPY ../requirements.txt requirements.txt
+COPY requirements.txt requirements.txt
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt --no-cache-dir
 
 # Copy all files
-COPY ../src src/
-COPY ../setup.py setup.py
+COPY src/ src/
+COPY setup.py setup.py
 
 # Install source as package
 RUN pip install -e .
 
 # Copy Data
-COPY ../data data/
+COPY data/ data/
 
 # Copy configs
-COPY ../config config/
+COPY config/ config/
 
 # Run train
 ENTRYPOINT ["python", "src/models/train_model.py"]
