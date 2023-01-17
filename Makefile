@@ -98,9 +98,9 @@ deploy_docker_app:
 		--allow-unauthenticated \
 		--port=8501 \
 		--set-env-vars=WANDB_ENTITY=$(WANDB_ENTITY),WANDB_PROJECT=$(WANDB_PROJECT),WANDB_API_KEY=$(WANDB_API_KEY),WANDB_MODELCHECKPOINT=$(WANDB_MODELCHECKPOINT) \
-		--service-account=420212724383-compute@developer.gserviceaccount.com \
+		--service-account=$(SERVICE_ACCOUNT) \
 		--region=europe-west1 \
-		--project=mlops-374308
+		--project=$(GCP_PROJECT)
 
 ## Set up python interpreter environment
 create_environment:
