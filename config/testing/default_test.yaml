@@ -1,5 +1,5 @@
 seed: 123
-batch_size: 32
+batch_size: 256
 accelerator: 'auto'
 logger: 'wandb'
-ckpt_path: "model-90it9ou2:best_k"
+ckpt_path: "model-33wcp5eg:best_k"
