@@ -118,7 +118,7 @@ In the cookiecutter template, the group has filled out the folders: _models_, _r
 >
 > Answer:
 
---- question 6 fill here ---
+We used Black to format our code such that it is PEP 8 compliant, which Flake8 then checks. We also used isort to handle imports properly. It's very important to keep a consistent code style throughout the project.
 
 ## Version control
 
@@ -131,7 +131,7 @@ In the cookiecutter template, the group has filled out the folders: _models_, _r
 >
 > Answer:
 
---- question 7 fill here ---
+We have five tests, split in model tests and data tests.
 
 ### Question 8
 
@@ -146,7 +146,7 @@ In the cookiecutter template, the group has filled out the folders: _models_, _r
 >
 > Answer:
 
---- question 8 fill here ---
+We have 28% coverage, with our tests. We are only testing core modules, as the data and the model right now. We don't fully expect our code to be error free, as there are always edge-cases, even if we got 100% coverage. It is also hard to attain 100%. This is though a good indicator if your tests are actually doing something.
 
 ### Question 9
 
@@ -161,7 +161,7 @@ In the cookiecutter template, the group has filled out the folders: _models_, _r
 >
 > Answer:
 
---- question 9 fill here ---
+We used both branches and pull-requests. All features were added as feature branches, as the main branch is protected so you cannot push into it directly. This is much nicer when you are 4 people working together, as everyone can contribute on their own branch.
 
 ### Question 10
 
@@ -176,8 +176,7 @@ In the cookiecutter template, the group has filled out the folders: _models_, _r
 >
 > Answer:
 
---- question 10 fill here ---
-
+We did use DVC for controlling our data workflow. It was definetely easier to ensure that everyone had the same version of the dataset across all their multiple devices/distros. It is really easy to just `dvc pull`, and because we set it up in a bucket, it was accessible anywhere.
 ### Question 11
 
 > **Discuss you continues integration setup. What kind of CI are you running (unittesting, linting, etc.)? Do you test**
@@ -192,7 +191,7 @@ In the cookiecutter template, the group has filled out the folders: _models_, _r
 >
 > Answer:
 
---- question 11 fill here ---
+We used a couple of CI integrations. First we used pre-commit to make sure our CI pipelines didn't fail. We then use four files: Flake8 for formatting, isort for import statements, a tests file running our tests, and finally a coverage file running a coverage report on every PR. An example of the workflow can be seen here: <https://github.com/radziko/colo_mlops/actions/runs/3938966967/jobs/6738273112>
 
 ## Running code and tracking experiments
 
@@ -211,7 +210,8 @@ In the cookiecutter template, the group has filled out the folders: _models_, _r
 >
 > Answer:
 
---- question 12 fill here ---
+We used hydra to configure our experiments, such that it provided all the variables for training and testing. We would start it like this:
+`python src/models/train_model.py training=default_train`
 
 ### Question 13
 
@@ -226,7 +226,7 @@ In the cookiecutter template, the group has filled out the folders: _models_, _r
 >
 > Answer:
 
---- question 13 fill here ---
+We primarily used Wandb to store hyperparameters for each run, and experiments. We should probably have created new config files for each run, but it was easier to overwrite it and save it to Wandb instead. Especially because we changed between training locally and in the cloud.
 
 ### Question 14
 
@@ -243,7 +243,14 @@ In the cookiecutter template, the group has filled out the folders: _models_, _r
 >
 > Answer:
 
---- question 14 fill here ---
+Training:
+[Training example](figures/train_example.png)
+Validation:
+[Validation example](figures/validation_example.png)
+
+As seen in the first image, we're tracking our training. We're both tracking training loss, and the accuracy as well as the AUROC score. This informs us how the training is progressing, and if we're in fact reducing loss as well as increase our accuracy over time.
+
+The second image shows our validation samples, which are images in the validation set. We see the image, what the model predicted and what the ground truth of the image is. This is a good sanity check, as it allows us to visually confirm that the model is working.
 
 ### Question 15
 
@@ -258,7 +265,10 @@ In the cookiecutter template, the group has filled out the folders: _models_, _r
 >
 > Answer:
 
---- question 15 fill here ---
+We created 3 images. One for training, one for predictions/inference and one for deploying our webapp with the finished model in the cloud.
+
+To run the web-app locally, you would run: `docker run --env-file .env -p 8501:8501 app:latest`
+Here is a link to the file: <https://github.com/radziko/colo_mlops/blob/main/dockerfiles/app.dockerfile>
 
 ### Question 16
 
@@ -273,7 +283,8 @@ In the cookiecutter template, the group has filled out the folders: _models_, _r
 >
 > Answer:
 
---- question 16 fill here ---
+Debugging depends on who is coding. One of use used the one in PyCharm, another one of us used VSCode's debugger, and at one point we used PDB as well.
+We had a memory leak, so we had to profile at one point, as the training was just slowing down and began aloccating the entire GPU memory. We found the leak :)
 
 ## Working in the cloud
 
@@ -289,8 +300,12 @@ In the cookiecutter template, the group has filled out the folders: _models_, _r
 > *We used the following two services: Engine and Bucket. Engine is used for... and Bucket is used for...*
 >
 > Answer:
-
---- question 17 fill here ---
+GCP IAM: Permissions for sharing the project.
+Cloud Storage: Bucket for hosting data.
+Cloud Build: We use triggers here to build our docker images from PR's in Github.
+Container Registry: Stores our built images from Cloud Build.
+Vertex AI: Run our containers, when we're training in the cloud.
+Cloud Run: Run our container for the webapp.
 
 ### Question 18
 
@@ -305,8 +320,7 @@ In the cookiecutter template, the group has filled out the folders: _models_, _r
 >
 > Answer:
 
---- question 18 fill here ---
-
+We did not use compute engine, as Vertex AI provided easier training than spinning up a whole VM, and Cloud Run is more ligthweight for hosting a simple webapp. We did not see the benefit of using Compute Engine.
 ### Question 19
 
 > **Insert 1-2 images of your GCP bucket, such that we can see what data you have stored in it.**
@@ -314,7 +328,9 @@ In the cookiecutter template, the group has filled out the folders: _models_, _r
 >
 > Answer:
 
---- question 19 fill here ---
+[Google Project buckets](figures/project_bucket.png)
+
+[Specific data bucket](figures/colo_bucket.png)
 
 ### Question 20
 
@@ -323,7 +339,7 @@ In the cookiecutter template, the group has filled out the folders: _models_, _r
 >
 > Answer:
 
---- question 20 fill here ---
+[Container registry](figures/containers.png)
 
 ### Question 21
 
@@ -348,7 +364,8 @@ In the cookiecutter template, the group has filled out the folders: _models_, _r
 >
 > Answer:
 
---- question 22 fill here ---
+We developed a webapp with Streamlit, then dockerized it, and deployed it to Cloud Run. We also tested it first locally. The webapp allows any user to upload an image of their choosing, and have the model classify their image. The top 5 probabilites are then returned.
+Furthermore there are 10 example images you can classify, if you don't want to upload your own.
 
 ### Question 23
 
@@ -363,7 +380,9 @@ In the cookiecutter template, the group has filled out the folders: _models_, _r
 >
 > Answer:
 
---- question 23 fill here ---
+As we used the CIFAR10 dataset, there are only 10 classes. Furthermore the dataset is self-contained, and primarily used as a benchmark dataset. Therefore we don't really suspect
+
+WE might implement it hehe
 
 ### Question 24
 
@@ -377,7 +396,7 @@ In the cookiecutter template, the group has filled out the folders: _models_, _r
 >
 > Answer:
 
---- question 24 fill here ---
+We used one shared GCP project, so only one member was billed in regards to the project. This member used 155 credits so far, and the most expensive service was Cloud Build, because that's where we hosted our webapp.
 
 ## Overall discussion of project
 
