@@ -102,7 +102,7 @@ def main():
 
         with st.spinner("Classifying ..."):
             time.sleep(2)
-            st.write("Model predicttions:")
+            st.write("Model predictions:")
             predict(model, my_img, categories)
             st.success("Done!")
 

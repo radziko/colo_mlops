@@ -1,5 +1,0 @@
-seed: 123
-batch_size: 1
-accelerator: 'auto'
-logger: 'wandb'
-ckpt_path: "model-90it9ou2:best_k"
