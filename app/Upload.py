@@ -89,7 +89,7 @@ def main():
 
         else:
             with st.spinner("Classifying ..."):
-                st.header("Algorithm Predicts: ")
+                st.header("Model predictions:")
                 time.sleep(2)
                 predict(model, my_image, categories)
 
