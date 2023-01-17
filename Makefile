@@ -54,20 +54,49 @@ format:
 lint:
 	flake8 src/ app/ tests/
 
-## Build docker image
+## Build docker image for model training
 docker_build_train:
 	docker build \
-		-t $(PROJECT_NAME):train \
+		-f dockerfiles/train.dockerfile \
+		-t gcr.io/$(GCP_PROJECT)/train:latest \
 		.
 
+## Build docker image for model evaluation
 docker_build_predict:
 	docker build \
-		-t $(PROJECT_NAME):predict \
-		-f predict.dockerfile \
+		-f dockerfiles/predict.dockerfile \
+		-t gcr.io/$(GCP_PROJECT)/predict:latest \
 		.
 
-docker_build: docker_build_train docker_build_predict
+## Build docker image for the app
+docker_build_app:
+	docker build \
+		-f dockerfiles/app.dockerfile \
+		-t gcr.io/$(GCP_PROJECT)/app:latest \
+		.
 
+## Build docker images for both training, evaluation and app all in one
+docker_build: docker_build_train docker_build_predict docker_build_app
+
+## Push training docker image to gcloud container registry
+docker_push_train:
+	docker push \
+		gcr.io/$(GCP_PROJECT)/train:latest
+
+## Push evaluation docker image to gcloud container registry
+docker_push_predict:
+	docker push \
+		gcr.io/$(GCP_PROJECT)/predict:latest
+
+## Push app docker image to gcloud container registry
+docker_push_app:
+	docker push \
+		gcr.io/$(GCP_PROJECT)/app:latest
+
+## Push all docker images to gcloud container registry
+docker_push: docker_push_train docker_push_predict docker_push_app
+
+## Run the training docker image
 docker_train:
 	docker run \
 		--gpus all \
@@ -75,24 +104,22 @@ docker_train:
 		--rm \
 		--ipc=host \
 		--env-file .env \
-		colo_mlops:train
+		gcr.io/$(GCP_PROJECT)/train:latest
 
-docker_app_local:
+## Run the evaluation docker image
+docker_predict:
+	docker run \
+		gcr.io/$(GCP_PROJECT)/predict:latest
+
+## Deploy the app locally from the docker image
+docker_deploy_app_local:
 	docker run \
 		-p 8501:8501 \
 		--env-file .env \
 		app:latest
 
-build_docker_app:
-	docker build \
-		-f app.dockerfile . \
-		-t gcr.io/$(GCP_PROJECT)/app
-
-push_docker_app:
-	docker push \
-		gcr.io/$(GCP_PROJECT)/app
-
-deploy_docker_app:
+## Deploy the app in gcloud Cloud Run from the docker image
+docker_deploy_app_cloud:
 	gcloud run deploy app \
 		--image=gcr.io/$(GCP_PROJECT)/app:latest \
 		--allow-unauthenticated \
