@@ -1,3 +1,4 @@
+import pytorch_lightning as pl
 from pytorch_lightning.callbacks import Callback
 
 import wandb
@@ -5,9 +6,24 @@ import wandb
 
 class LogValidationPredictionsCallback(Callback):
     def on_validation_batch_end(
-        self, trainer, pl_module, outputs, batch, batch_idx, dataloader_idx
+        self,
+        trainer: pl.Trainer,
+        pl_module: pl.LightningModule,
+        outputs,
+        batch,
+        batch_idx: int,
+        dataloader_idx: int,
     ):
-        """Called when the validation batch ends."""
+        """Called when the validation batch ends.
+
+        Args:
+            trainer: The pytorch lightning trainer.
+            pl_module: The pytorch lightning module.
+            outputs: The outputs of the model.
+            batch: A tuple of the input and label.
+            batch_idx: The current batch index.
+            dataloader_idx: The current dataloader index.
+        """
 
         # `outputs` comes from `LightningModule.validation_step`
         # which corresponds to our model predictions in this case
