@@ -1,8 +1,6 @@
-name: "Run tests"
+name: "Run coverage"
 
 on:
-  push:
-    branches: [ master, main ]
   pull_request:
     branches: [ master, main ]
 
@@ -30,5 +28,10 @@ jobs:
         pip install -r requirements.txt
     - name: Test with pytest
       run: |
-        pip install pytest
-        pytest -v
+        pip install pytest pytest-cov
+        pytest --cov-report xml:coverage.xml --cov=src tests/
+    - name: Coverage
+      uses: orgoro/coverage@v3
+      with:
+        coverageFile: coverage.xml
+        token: ${{ secrets.GITHUB_TOKEN }}
