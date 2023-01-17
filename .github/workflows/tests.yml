@@ -30,5 +30,11 @@ jobs:
         pip install -r requirements.txt
     - name: Test with pytest
       run: |
-        pip install pytest
+        pip install pytest pytest-cov
         pytest -v
+        pytest --cov-report xml:coverage.xml --cov=src tests/
+    - name: Coverage
+      uses: orgoro/coverage@v3
+      with:
+        coverageFile: coverage.xml
+        token: ${{ secrets.GITHUB_TOKEN }}
