@@ -86,15 +86,15 @@ docker_app_local:
 build_docker_app:
 	docker build \
 		-f app.dockerfile . \
-		-t gcr.io/mlops-374308/app
+		-t gcr.io/$(GCP_PROJECT)/app
 
 push_docker_app:
 	docker push \
-		gcr.io/mlops-374308/app
+		gcr.io/$(GCP_PROJECT)/app
 
 deploy_docker_app:
 	gcloud run deploy app \
-		--image=gcr.io/mlops-374308/app@sha256:574d8405601317085cdd6a40086145d877764d4bdda2f785fe29a89e61a48e83 \
+		--image=gcr.io/$(GCP_PROJECT)/app:latest \
 		--allow-unauthenticated \
 		--port=8501 \
 		--set-env-vars=WANDB_ENTITY=$(WANDB_ENTITY),WANDB_PROJECT=$(WANDB_PROJECT),WANDB_API_KEY=$(WANDB_API_KEY),WANDB_MODELCHECKPOINT=$(WANDB_MODELCHECKPOINT) \
