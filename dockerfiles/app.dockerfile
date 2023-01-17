@@ -8,18 +8,18 @@ RUN apt update && \
     apt clean && rm -rf /var/lib/apt/lists/*
 
 # Install requirements
-COPY requirements_app.txt requirements_app.txt
+COPY ../requirements_app.txt requirements_app.txt
 RUN pip install --upgrade pip
 RUN pip install -r requirements_app.txt --no-cache-dir
 
 # Copy src files
-COPY src/ src/
+COPY ../src src/
 
 # copy app
-COPY app/ app/
+COPY ../app app/
 
 # Install source as package
-COPY setup.py setup.py
+COPY ../setup.py setup.py
 RUN pip install -e .
 
 # Run train
