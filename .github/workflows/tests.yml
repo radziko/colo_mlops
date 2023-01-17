@@ -32,7 +32,7 @@ jobs:
       run: |
         pip install pytest pytest-cov
         pytest -v
-        pytest --cov-report xml:coverage.xml tests/
+        pytest --cov-report xml:coverage.xml --cov=. tests/
     - name: Coverage
       uses: orgoro/coverage@v3
       with:
