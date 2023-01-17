@@ -1,0 +1,18 @@
+steps:
+  - name: python
+    entrypoint: python
+    args: [ "-m", "pip", "install", "--upgrade", "pip" ]
+  - name: python
+    entrypoint: python
+    args: [ "-m", "pip", "install", "dvc[gs]", "--user" ]
+  - name: python
+    entrypoint: python
+    args: [ "-m", "dvc", "pull" ]
+  - name: 'gcr.io/kaniko-project/executor:latest'
+    args:
+      - '--dockerfile=dockerfiles/predict.dockerfile'
+      - '--context=.'
+      - '--destination=gcr.io/$PROJECT_ID/predict:latest'
+      - '--cache=true'
+options:
+  machineType: 'N1_HIGHCPU_32'

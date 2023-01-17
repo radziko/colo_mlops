@@ -14,9 +14,9 @@ def test_data_set_length():
     val_loader = data.val_dataloader()
     test_loader = data.test_dataloader()
 
-    assert len(train_loader.dataset) == 47500
+    assert len(train_loader.dataset) == 45000
     assert len(test_loader.dataset) == 10000
-    assert len(val_loader.dataset) == 2500
+    assert len(val_loader.dataset) == 5000
 
 
 if __name__ == "__main__":
