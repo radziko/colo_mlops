@@ -96,6 +96,8 @@ deploy_docker_app:
 	gcloud run deploy app \
 		--image=gcr.io/$(GCP_PROJECT)/app:latest \
 		--allow-unauthenticated \
+		--cpu=2 \
+		--memory=8Gi \
 		--port=8501 \
 		--set-env-vars=WANDB_ENTITY=$(WANDB_ENTITY),WANDB_PROJECT=$(WANDB_PROJECT),WANDB_API_KEY=$(WANDB_API_KEY),WANDB_MODELCHECKPOINT=$(WANDB_MODELCHECKPOINT) \
 		--service-account=$(SERVICE_ACCOUNT) \
