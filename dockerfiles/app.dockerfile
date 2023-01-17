@@ -16,7 +16,7 @@ RUN pip install -r requirements_app.txt --no-cache-dir
 COPY src/ src/
 
 # copy app
-COPY app/ app/
+COPY app app/
 
 # Install source as package
 COPY setup.py setup.py
