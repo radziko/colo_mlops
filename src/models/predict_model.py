@@ -17,7 +17,12 @@ from src.utils.logger import get_logger
 )
 def predict(config):
     """Takes a config file and does inference with
-    a trained model on the CIFAR10 test set."""
+        a trained model on the CIFAR10 test set.
+
+        Args:
+            config: OmegaConf, configuration object containing
+    the parameters for the prediction.
+    """
 
     print(f"configuration: \n {OmegaConf.to_yaml(config.testing)}")
 
