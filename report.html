@@ -1,0 +1,89 @@
+<p>arl Anton Schmidt</p>
+<p>Joachim Schrøder Andersson</p>
+<p>Jonas Hoffmann</p>
+<p>Julius Radzikowski</p>
+<h2>Project Description for Week 1:</h2>
+<h4>Overall goal of the project</h4>
+<p>The overall goal of the project is to use a deep learning classification model, to classify images from the CIFAR-10 dataset into 10 classes, which include "dog", "truck", "ship" amongst others. Another main goal of the project is to deploy as many of the tools from the course as possible, to make this project easy to understand and reproduce.</p>
+<h4>What framework are you going to use (PyTorch Image Models, Transformer, Pytorch-Geometrics)</h4>
+<p>This project will deploy the framework <a href="https://github.com/rwightman/pytorch-image-models">PyTorch Image Models</a>, since we will be working with image classification.</p>
+<h4>How do you intend to include the framework into your project</h4>
+<p>The framework will be used to obtain a pretrained version of the model Resnet18, which will form the base of doing transfer learning; doing further fine-tuning and then evaluation of the model. Other versions of ResNet might be tested, also from TIMM (Pytorch Image Models).</p>
+<h4>What data are you going to run on (initially, may change)</h4>
+<p>Initially, the data to be used is the <a href="https://www.cs.toronto.edu/~kriz/cifar.html">CIFAR-10 dataset</a>. The dataset consists of 60000 images distributed equally between 10 classes. An image is 32x32 and contains color. This dataset was chosen due to its simplicity for use in image classification since the overarching goal of this project is to deploy MLOps tools.</p>
+<h4>What deep learning models do you expect to use</h4>
+<p>From the before-mentioned model-framework, the RestNet18 model (<a href="https://arxiv.org/abs/1512.03385">Documentation</a>) is planned to be used. We might try out additional models if time allow us to do so.</p>
+<p>MLOps project</p>
+<h2>Project setup</h2>
+<p>First, install all the <code>pip</code> requirements:
+<code>bash
+pip install -r requirements.txt</code>
+Or:
+<code>bash
+make requirements</code>
+Second, install the <em>pre-commit</em> hooks:
+<code>bash
+pre-commit install</code>
+And then download the data with <code>dvc</code>:
+<code>bash
+dvc pull</code>
+Finally, copy the <code>.env.default</code> to <code>.env</code> and fill out the environment variables.</p>
+<h2>Commands to use:</h2>
+<ol>
+<li>Install requirements:        <code>pip install -r requirements.txt</code></li>
+<li>Install <em>pre-commit</em> hooks:  <code>pre-commit install</code></li>
+<li>Load data from dvc:          <code>dvc pull</code></li>
+<li>Set up the environment:      This requires a bit more brainpower, since the user have to manually look up these values. The above commands should have created a file named <code>.env.default</code>. First rename it <code>.env</code>. Second fill out the values. In order to do so, one need a <a href="https://wandb.ai/home">Wandb</a>-account with a project. The <code>WANDB_MODELCHECKPOINT</code> entity should have a value like <em>model-90it9ou2:best_k</em>.</li>
+<li>Use dataprocessor:           <code>make data</code> OR <code>python src/data/make_dataset.py data/raw data/processed</code></li>
+<li>Train model:                 <code>python src/models/train_model.py</code></li>
+<li>Test model:                  <code>python src/models/predict_model.py</code></li>
+<li>Run streamlit local:         <code>streamlit run  app/upload.py</code></li>
+</ol>
+<h2>Project Organization</h2>
+<pre><code>├── LICENSE
+├── Makefile           &lt;- Makefile with commands like `make data` or `make train`
+├── README.md          &lt;- The top-level README for developers using this project.
+├── data
+│   ├── external       &lt;- Data from third party sources.
+│   ├── interim        &lt;- Intermediate data that has been transformed.
+│   ├── processed      &lt;- The final, canonical data sets for modeling.
+│   └── raw            &lt;- The original, immutable data dump.
+│
+├── docs               &lt;- A default Sphinx project; see sphinx-doc.org for details
+│
+├── models             &lt;- Trained and serialized models, model predictions, or model summaries
+│
+├── notebooks          &lt;- Jupyter notebooks. Naming convention is a number (for ordering),
+│                         the creator's initials, and a short `-` delimited description, e.g.
+│                         `1.0-jqp-initial-data-exploration`.
+│
+├── references         &lt;- Data dictionaries, manuals, and all other explanatory materials.
+│
+├── reports            &lt;- Generated analysis as HTML, PDF, LaTeX, etc.
+│   └── figures        &lt;- Generated graphics and figures to be used in reporting
+│
+├── requirements.txt   &lt;- The requirements file for reproducing the analysis environment, e.g.
+│                         generated with `pip freeze &gt; requirements.txt`
+│
+├── setup.py           &lt;- makes project pip installable (pip install -e .) so src can be imported
+├── src                &lt;- Source code for use in this project.
+│   ├── __init__.py    &lt;- Makes src a Python module
+│   │
+│   ├── data           &lt;- Scripts to download or generate data
+│   │   └── make_dataset.py
+│   │
+│   ├── features       &lt;- Scripts to turn raw data into features for modeling
+│   │   └── build_features.py
+│   │
+│   ├── models         &lt;- Scripts to train models and then use trained models to make
+│   │   │                 predictions
+│   │   ├── predict_model.py
+│   │   └── train_model.py
+│   │
+│   └── visualization  &lt;- Scripts to create exploratory and results oriented visualizations
+│       └── visualize.py
+│
+└── tox.ini            &lt;- tox file with settings for running tox; see tox.readthedocs.io
+</code></pre>
+<hr />
+<p><small>Project based on the <a target="_blank" href="https://drivendata.github.io/cookiecutter-data-science/">cookiecutter data science project template</a>. #cookiecutterdatascience</small></p>

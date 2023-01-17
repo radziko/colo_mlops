@@ -49,7 +49,7 @@ be installed with `pip install click markdown`.
 >
 > Answer:
 
---- question 1 fill here ---
+Group number: 16
 
 ### Question 2
 > **Enter the study number for each member in the group**
@@ -60,7 +60,7 @@ be installed with `pip install click markdown`.
 >
 > Answer:
 
---- question 2 fill here ---
+s204096, s204162, s204071, s204154.
 
 ### Question 3
 > **What framework did you choose to work with and did it help you complete the project?**
@@ -73,7 +73,7 @@ be installed with `pip install click markdown`.
 >
 > Answer:
 
---- question 3 fill here ---
+Multiple frameworks were used for the project. The cookiecutter repo-format is used to help the reproducibility of the project. This project will deploy the framework [PyTorch Image Models](https://github.com/rwightman/pytorch-image-models) in order to obtain a classification model. Hereunder, the [Pytorch-lightning](https://pytorch-lightning.readthedocs.io/en/stable/) framework is used for avoiding boilerplate code and functionality for model training, etc.
 
 ## Coding environment
 
@@ -92,7 +92,7 @@ be installed with `pip install click markdown`.
 >
 > Answer:
 
---- question 4 fill here ---
+We managed dependencies with the pipreqs-package. Using the pipreqs-command in the repository generates a requirements textfile. This includes the packages and their version which are necessary to get the full outcome of this project. For a new user to obtain the dependencies, one will need to run ```pip install -r requirements.txt``` in the terminal of the repo (preferably with a new virtual environment, for example created with conda).
 
 ### Question 5
 
@@ -107,7 +107,7 @@ be installed with `pip install click markdown`.
 > *experiments.*
 > Answer:
 
---- question 5 fill here ---
+In the cookiecutter template, the group has filled out the folders: _models_, _reports_, _src_ (not /features/) and _test_. The folders _references_, _docs_ and _notebooks_. are removed. Multiple new folders are made:  _.dvc_ handles data versioning, _outputs_ contains the output from training and most profound is the folder _app_. This contains images and code to run the streamlit app.
 
 ### Question 6
 
