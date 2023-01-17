@@ -47,12 +47,12 @@ clean:
 
 ## Format the files
 format:
-	isort src/
-	black src/
+	isort src/ app/ tests/
+	black src/ app/ tests/
 
 ## Lint using flake8
 lint:
-	flake8 src
+	flake8 src/ app/ tests/
 
 ## Build docker image
 docker_build_train:
