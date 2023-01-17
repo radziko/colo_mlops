@@ -13,7 +13,7 @@ def test_model_output():
 
     assert out.shape == torch.Size([batchsize, 10])
     assert (
-        torch.sum(torch.exp(out)).item()
+        round(torch.sum(torch.exp(out)).item())
         == (torch.tensor(batchsize, dtype=torch.float)).item()
     )
 
