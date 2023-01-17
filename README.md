@@ -56,7 +56,7 @@ Finally, copy the ```.env.default``` to ```.env``` and fill out the environment 
 5. Use dataprocessor:           ```make data``` OR ```python src/data/make_dataset.py data/raw data/processed```
 6. Train model:                 ```python src/models/train_model.py```
 7. Test model:                  ```python src/models/predict_model.py```
-8. Run streamlit local:         ```streamlit run  app-streamlit/app.py```
+8. Run streamlit local:         ```streamlit run  app/upload.py```
 
 
 
