@@ -1,5 +1,6 @@
-import wandb
 from pytorch_lightning.callbacks import Callback
+
+import wandb
 
 
 class LogValidationPredictionsCallback(Callback):

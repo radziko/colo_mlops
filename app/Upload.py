@@ -12,10 +12,6 @@ from src.models.load_model_artifact import load_model_artifact
 from src.models.model import CIFAR10Module
 from src.utils.logger import get_logger
 
-# @hydra.main(
-#   config_path="../config", config_name="default_config.yaml", version_base="1.2")
-
-
 @st.experimental_memo
 def get_model():
     # print(f"configuration: \n {OmegaConf.to_yaml(config.app)}")
