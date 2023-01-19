@@ -348,7 +348,7 @@ We did not use compute engine, as Vertex AI provided easier training than spinni
 >
 > Answer:
 
---- question 21 fill here ---
+[Cloud Build History](figures/Q21_build_history.png).
 
 ### Question 22
 
@@ -431,7 +431,7 @@ We used one shared GCP project, so only one member was billed in regards to the 
 >
 > Answer:
 
---- question 26 fill here ---
+The biggest challenges of the project has been building the pipeline being dependent on the cloud services. The use of Google Cloud services has been the most difficult since there is a lack of documentation in some cases, while the existing documentation did not always get us to the point where the services were working. Vertex was a profound example of this. Also, the use of some software did require some tricky adjustments when wanting to transfer the classifier to the Cloud and API. Here, the handling of configuration files with Hydra was an obstacle.
 
 ### Question 27
 

@@ -49,14 +49,22 @@ dvc pull
 Finally, copy the ```.env.default``` to ```.env``` and fill out the environment variables.
 
 ## Commands to use:
-1. Install requirements:        ```pip install -r requirements.txt```
-2. Install _pre-commit_ hooks:  ```pre-commit install```
-3. Load data from dvc:          ```dvc pull```
-4. Set up the environment:      This requires a bit more brainpower, since the user have to manually look up these values. The above commands should have created a file named ```.env.default```. First rename it ```.env```. Second fill out the values. In order to do so, one need a [Wandb](https://wandb.ai/home)-account with a project. The ```WANDB_MODELCHECKPOINT``` entity should have a value like _model-90it9ou2:best_k_.
-5. Use dataprocessor:           ```make data``` OR ```python src/data/make_dataset.py data/raw data/processed```
-6. Train model:                 ```python src/models/train_model.py```
-7. Test model:                  ```python src/models/predict_model.py```
-8. Run streamlit local:         ```streamlit run  app/upload.py```
+1. Install requirements:
+        ```pip install -r requirements.txt```
+2. Install _pre-commit_ hooks:
+        ```pre-commit install```
+3. Load data from dvc:
+        ```dvc pull```
+4. Set up the environment:
+      This requires a bit more brainpower, since the user have to manually look up these values. The above commands should have created a file named ```.env.default```. First rename it ```.env```. Second fill out the values. In order to do so, one need a [Wandb](https://wandb.ai/home)-account with a project. The ```WANDB_MODELCHECKPOINT``` entity should have a value like _model-90it9ou2:best_k_.
+5. Use dataprocessor:
+        ```make data``` OR ```python src/data/make_dataset.py data/raw data/processed```
+6. Train model:
+        ```python src/models/train_model.py```
+7. Test model:
+        ```python src/models/predict_model.py```
+8. Run streamlit local:
+         ```streamlit run  app/upload.py```
 
 
 
