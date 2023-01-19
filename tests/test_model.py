@@ -3,6 +3,7 @@ import torch
 from src.models.model import CIFAR10Module, create_model
 
 
+@torch.no_grad()
 def test_model_output():
     model = CIFAR10Module(classifier=create_model())
 
@@ -11,7 +12,10 @@ def test_model_output():
     out = model.forward(x)
 
     assert out.shape == torch.Size([batchsize, 10])
-    assert torch.sum(torch.exp(out)) == torch.tensor(batchsize)
+    assert (
+        round(torch.sum(torch.exp(out)).item())
+        == (torch.tensor(batchsize, dtype=torch.float)).item()
+    )
 
 
 if __name__ == "__main__":

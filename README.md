@@ -102,7 +102,6 @@ make docker_train
 ```bash
 make docker_train_cloud
 ```
-
 4. The same can be done for the predict docker image. Either do
 ```bash
 make docker_predict

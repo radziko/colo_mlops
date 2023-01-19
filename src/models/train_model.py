@@ -18,7 +18,12 @@ from src.utils.logger import get_logger
 )
 def train(config):
     """Takes a config file and trains the model. Saves a model
-    checkpoint in weights and biases after each epoch."""
+        checkpoint in weights and biases after each epoch.
+
+        Args:
+            config: OmegaConf, configuration object
+    containing the parameters for the training.
+    """
 
     print(f"configuration: \n {OmegaConf.to_yaml(config.training)}")
 

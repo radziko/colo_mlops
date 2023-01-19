@@ -1,9 +1,3 @@
-"""
-SimplerNetV1 in Pytorch.
-The implementation is basded on :
-https://github.com/D-X-Y/ResNeXt-DenseNet
-"""
-
 from typing import Tuple
 
 import pytorch_lightning as pl
@@ -16,6 +10,11 @@ from torchmetrics import AUROC, Accuracy, F1Score, MetricCollection, Precision, 
 
 
 def create_model():
+    """Creates a ResNet-18 model for CIFAR10 classification.
+
+    Returns:
+        nn.Module, the ResNet-18 model
+    """
     model = torchvision.models.resnet18(weights=None, num_classes=10)
 
     model.conv1 = nn.Conv2d(
@@ -33,6 +32,13 @@ class CIFAR10Module(pl.LightningModule):
         lr: float = 1e-3,
         batch_size: int = 64,
     ):
+        """Initializes the CIFAR10 module.
+
+        Args:
+            classifier: nn.Module, the model to use for classification.
+            lr: float, learning rate to use for training.
+            batch_size: int, the batch size to use for training.
+        """
         super().__init__()
         self.classifier = classifier
         self.loss = nn.NLLLoss()
@@ -71,6 +77,8 @@ class CIFAR10Module(pl.LightningModule):
 
         Args:
             batch: A batch of a predetermined batch size from the CIFAR10 dataset.
+                The batch should contain a tuple of input and target data.
+            batch_idx: The index of the current batch.
 
         Returns:
             loss: The PyTorch NLLLoss on the batch.
@@ -92,12 +100,14 @@ class CIFAR10Module(pl.LightningModule):
     ) -> list[int]:
         """Calculates the predicted labels for a batch given during validation.
 
-        Args:
-            batch: A batch from the CIFAR10 dataset.
+                Args:
+                    batch: A batch from the CIFAR10 dataset. The batch should contain a
+        tuple of input and target data.
+                    batch_idx: The index of the current batch.
 
-        Returns:
-            pred_label: The predicted label of each data point on the batch,
-            i.e. 64 predicted labels if batch_size=64.
+                Returns:
+                    pred_label: The predicted label of each data point on the batch,
+                        i.e. 64 predicted labels if batch_size=64.
         """
         x, y = batch
 
@@ -142,7 +152,7 @@ class CIFAR10Module(pl.LightningModule):
         to calculate the log-probabilites from NLLLoss.
 
         Args:
-            batch: A batch from the CIFAR10 dataset.
+            x: A batch of input data from the CIFAR10 dataset.
 
         Returns:
             pred_label: The log-probabilites for a batch.
