@@ -122,7 +122,7 @@ make docker_deploy_app_cloud
 ```
 - This will deploy the app such that others can use the site, and this can be accessed from a link generated automatically.
 
-This concludes the guide on how to best setup and utilise this project!
+This concludes the guide on how to best setup and deploy this project!
 
 Project Organization
 ------------
