@@ -29,44 +29,99 @@ From the before-mentioned model-framework, the RestNet18 model ([Documentation](
 
 MLOps project
 
-## Project setup
-First, install all the ```pip``` requirements:
+## Project Quick Start
+1. Before you can do anything with this project, you need to clone the repository. This can be done with
 ```bash
-pip install -r requirements.txt
+git clone git@github.com:radziko/colo_mlops.git
 ```
-Or:
+2. We recommend that you setup a new ```Conda``` environment for this project. Do this with the command
+```bash
+make create_environment
+```
+3. Now that you have the code locally, you need install all the ```pip``` requirements:
 ```bash
 make requirements
 ```
-Second, install the _pre-commit_ hooks:
+4. Install the _pre-commit_ hooks:
 ```bash
 pre-commit install
 ```
-And then download the data with ```dvc```:
+5. Download the data with ```dvc```:
 ```bash
+pip install dvc
+pip install 'dvc[gs]'
 dvc pull
 ```
-Finally, copy the ```.env.default``` to ```.env``` and fill out the environment variables.
+6. Finally, many of the scripts require environment variables. The above commands should have created a file named ```.env.default```. Copy this, and rename the copy as ```.env```. In order to do so, one needs a [Wandb](https://wandb.ai/home)-account to generate an API-key ```WANDB_API_KEY```. Second, you should create a team within Wandb that accounts for the ```WANDB_ENTITY```, and within that team a project that becomes the ```WANDB_PROJECT```. The ```WANDB_MODELCHECKPOINT``` entity should have a value like _model-90it9ou2:best_k_, and will only be created once a training run has been completed. Note, there are also the environment variables ```SERVICE_ACCOUNT``` and ```GCP_PROJECT```, however, we will fill these out later when needed.
 
-## Commands to use:
-1. Install requirements:
-        ```pip install -r requirements.txt```
-2. Install _pre-commit_ hooks:
-        ```pre-commit install```
-3. Load data from dvc:
-        ```dvc pull```
-4. Set up the environment:
-      This requires a bit more brainpower, since the user have to manually look up these values. The above commands should have created a file named ```.env.default```. First rename it ```.env```. Second fill out the values. In order to do so, one need a [Wandb](https://wandb.ai/home)-account with a project. The ```WANDB_MODELCHECKPOINT``` entity should have a value like _model-90it9ou2:best_k_.
-5. Use dataprocessor:
-        ```make data``` OR ```python src/data/make_dataset.py data/raw data/processed```
-6. Train model:
-        ```python src/models/train_model.py```
-7. Test model:
-        ```python src/models/predict_model.py```
-8. Run streamlit local:
-         ```streamlit run  app/upload.py```
+Now, you should have all the code locally, and an environment that is able to run the project.
 
+## Key Commands to use
+1. To process the raw data, you should use the command
+```bash
+make data
+```
+2. To train the model use
+```bash
+make train
+```
+- Note, the training is logged in your wandb account.
 
+3. To evaluate your newly trained model you can simply do
+```bash
+make evaluate
+```
+- Before you do this, you will need to find a model checkpoint within Wandb that you must enter in the ```.env```-file under the ```WANDB_MODELCHECKPOINT``` variable. This is found in Wandb under _"Homepage -> 'Your Team' -> Projects -> 'Your Project' -> 'Latest Run' -> Artifacts"_. Here, you should see a list of "_Output artifacts_", and in this there is the type "_model_". Copy the model name and insert this as the model checkpoint. If you wish to test the best model, you should put "_:best_k_" instead of e.g. "_:v_3_".
+
+4. You now have a trained model saved in Wandb that you can easily evaluate. This model is implement in an app that predicts on uploaded images. To host this app locally, you should use the command
+```bash
+make app
+```
+- This will host the app under ```http://localhost:8501/```.
+
+This covers the essential commands to use in this project locally. The next section will cover some commands for ```docker```, and ```GCP``` if you have this set up.
+
+## Extra Commands for Docker and GCP
+Beforre you continue with this section you will need to fill out the rest of the environment variables in the ```.env```-file. You should have a project within ```GCP``` that has a project-id, and this is the ```GCP_PROJECT```. Second, you should fill out your e-mail that you use in ```GCP```as the ```SERVICE_ACCOUNT``` variables.
+
+1. Given that you have Docker installed, you can containerize numerous element from this project quickly with the command
+```bash
+make docker_build
+```
+This will build 3 docker images: _train_, _predict_ and _app_. Also, these images will be tagged according to your ```GCP``` Container Registry in your project.
+
+2. To push the images into your ```GCP```-project you should use the command
+```bash
+make docker_push
+```
+3. If you wish to run the training locally you can do
+```bash
+make docker_train
+```
+- If you prefer to run the training in Vertex AI, instead do
+```bash
+make docker_train_cloud
+```
+4. The same can be done for the predict docker image. Either do
+```bash
+make docker_predict
+```
+- To run it locally. For cloud, do
+```bash
+make docker_predict_cloud
+```
+
+5. Finally, you can deploy the app from the dockerr container. To deploy this locally, do
+```bash
+make docker_deploy_app_local
+```
+- This will host the app under ```http://localhost:8501/```. If you wish to deploy the app using ```Cloud Run``` you can do
+```bash
+make docker_deploy_app_cloud
+```
+- This will deploy the app such that others can use the site, and this can be accessed from a link generated automatically.
+
+This concludes the guide on how to best setup and deploy this project!
 
 Project Organization
 ------------
