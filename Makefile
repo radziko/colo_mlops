@@ -27,6 +27,8 @@ endif
 requirements: test_environment
 	$(PYTHON_INTERPRETER) -m pip install -U pip setuptools wheel
 	$(PYTHON_INTERPRETER) -m pip install -r requirements.txt
+	$(PYTHON_INTERPRETER) -m pip install -r requirements_app.txt
+	$(PYTHON_INTERPRETER) -m pip install -e .
 
 ## Make Dataset
 data:
@@ -35,6 +37,14 @@ data:
 ## Run training
 train:
 	$(PYTHON_INTERPRETER) src/models/train_model.py
+
+## Evaluate the model
+evaluate:
+	$(PYTHON_INTERPRETER) src/models/predict_model.py
+
+## Host app locally
+app:
+	streamlit run app/Upload.py
 
 ## Pull data from DVC
 data_pull:
@@ -106,10 +116,38 @@ docker_train:
 		--env-file .env \
 		gcr.io/$(GCP_PROJECT)/train:latest
 
+## Run the training docker image in GCP Vertex AI
+docker_train_cloud:
+	gcloud ai \
+      --ai \
+      --custom-jobs \
+      --create \
+      --region=europe-west1 \
+      --display-name=train-$(git rev-parse --short HEAD) \
+      --args=++hydra.job.env_set.WANDB_ENTITY=$(WANDB_ENTITY) \
+      --args=++hydra.job.env_set.WANDB_PROJECT=$(WANDB_PROJECT) \
+      --args=++hydra.job.env_set.WANDB_API_KEY=$(WANDB_API_KEY) \
+      --worker-pool-spec=machine-type=n1-standard-8 \
+	  --container-image-uri=gcr.io/$(GCP_PROJECT)/train:latest
+
 ## Run the evaluation docker image
 docker_predict:
 	docker run \
 		gcr.io/$(GCP_PROJECT)/predict:latest
+
+## Run the predict docker image in GCP Vertex AI
+docker_predict_cloud:
+	gcloud ai \
+      --ai \
+      --custom-jobs \
+      --create \
+      --region=europe-west1 \
+      --display-name=predict-$(git rev-parse --short HEAD) \
+      --args=++hydra.job.env_set.WANDB_ENTITY=$(WANDB_ENTITY) \
+      --args=++hydra.job.env_set.WANDB_PROJECT=$(WANDB_PROJECT) \
+      --args=++hydra.job.env_set.WANDB_API_KEY=$(WANDB_API_KEY) \
+      --worker-pool-spec=machine-type=n1-standard-8 \
+	  --container-image-uri=gcr.io/$(GCP_PROJECT)/predict:latest
 
 ## Deploy the app locally from the docker image
 docker_deploy_app_local:
