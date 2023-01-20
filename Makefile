@@ -116,7 +116,7 @@ docker_deploy_app_local:
 	docker run \
 		-p 8501:8501 \
 		--env-file .env \
-		app:latest
+		gcr.io/$(GCP_PROJECT)/app:latest
 
 ## Deploy the app in gcloud Cloud Run from the docker image
 docker_deploy_app_cloud:
